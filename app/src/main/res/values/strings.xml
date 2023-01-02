@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">IndoorNavigationSystemForUMMC</string>
+
+    <string-array name="ethnicities">
+        <item>--SELECT ETHNICITY--</item>
+        <item>Malay</item>
+        <item>Chinese</item>
+        <item>Indian</item>
+        <item>Bumiputera</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="bloodTypes">
+        <item>--SELECT BLOOD TYPE--</item>
+        <item>O-</item>
+        <item>O+</item>
+        <item>B-</item>
+        <item>B+</item>
+        <item>A-</item>
+        <item>A+</item>
+        <item>AB-</item>
+        <item>AB+</item>
+    </string-array>
+</resources>

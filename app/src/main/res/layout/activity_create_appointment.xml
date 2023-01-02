@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="12sp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateAppointment"
+    android:layout_gravity="center">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblSymptoms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please select any symptoms you are currently experiencing:"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/chckFever"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fever"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Runny nose"
+                android:textSize="16sp"
+                android:id="@+id/chckRunnyNose"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cough"
+                android:textSize="16sp"
+                android:id="@+id/chckCough"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Headache"
+                android:textSize="16sp"
+                android:id="@+id/chckHeadache"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stomach pain"
+                android:textSize="16sp"
+                android:id="@+id/chckStomachPain"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nausea"
+                android:textSize="16sp"
+                android:id="@+id/chckNausea"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Joint pains"
+                android:textSize="16sp"
+                android:id="@+id/chckJointPain"/>
+
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Heavy breathing"
+                android:textSize="16sp"
+                android:id="@+id/chckHeavyBreathing"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Diarrhea"
+                android:textSize="16sp"
+                android:id="@+id/chckDiarrhea"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Please state any other symptoms you are experiencing:"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/txtOtherSymptoms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:autofillHints=""
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/txtAppointmentDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12sp"
+                android:hint="Select Date"
+                android:minHeight="48dp" />
+
+            <Spinner
+                android:id="@+id/spnrTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12sp"
+                android:minHeight="48dp"
+                android:outlineAmbientShadowColor="@color/black"
+                android:outlineProvider="bounds" />
+
+            <Button
+                android:id="@+id/btnSubmitAppointment"
+                android:layout_marginVertical="12sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SUBMIT" />
+
+            <TextView
+                android:id="@+id/lblCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_marginBottom="20sp"
+                android:textColor="#0388fc"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
