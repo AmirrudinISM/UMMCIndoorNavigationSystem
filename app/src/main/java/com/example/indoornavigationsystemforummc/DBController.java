@@ -12,7 +12,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DBController extends SQLiteOpenHelper{
 
@@ -62,7 +61,7 @@ public class DBController extends SQLiteOpenHelper{
 
     }
 
-    public boolean createPatient(String nric, String email, String password){
+    public boolean createPatient(String nric, String email, String password, String firstName, String lastName, String ethnicity, String bloodType){
         Cursor cursor = db.rawQuery("SELECT * FROM Patients WHERE Email = ? OR NRIC = ?", new String[]{email, nric});
         if(cursor.getCount() == 0){
             ContentValues contentValues= new ContentValues();
@@ -70,14 +69,13 @@ public class DBController extends SQLiteOpenHelper{
             contentValues.put("NRIC", nric);
             contentValues.put("email", email);
             contentValues.put("password", password);
-            contentValues.put("FirstName", "");
-            contentValues.put("LastName", "");
-            contentValues.put("FirstName", "");
-            contentValues.put("Ethnicity", "");
+            contentValues.put("FirstName", firstName);
+            contentValues.put("LastName", lastName);
+            contentValues.put("Ethnicity", ethnicity);
             contentValues.put("PhoneNumber", "");
             contentValues.put("Address", "");
             contentValues.put("Height", 0.0);
-            contentValues.put("BloodType", "");
+            contentValues.put("BloodType", bloodType);
 
             db.insert("Patients",null,contentValues);
             return true;
@@ -95,19 +93,14 @@ public class DBController extends SQLiteOpenHelper{
         return cursor;
     }
 
-    public boolean updatePatient(String patientID, String firstName, String lastName, String ethnicity, String phoneNumber, String address, float height, String bloodType){
+    public boolean updatePatient(String patientID, String phoneNumber, String address, float height){
         ContentValues values = new ContentValues();
 
         // on below line we are passing all values
         // along with its key and value pair.
-        values.put("FirstName", firstName);
-        values.put("LastName", lastName);
-        values.put("Ethnicity", ethnicity);
         values.put("PhoneNumber", phoneNumber);
         values.put("Address", address);
         values.put("Height", height);
-        values.put("BloodType", bloodType);
-
 
         // on below line we are calling a update method to update our database and passing our values.
         // and we are comparing it with name of our course which is stored in original name variable.

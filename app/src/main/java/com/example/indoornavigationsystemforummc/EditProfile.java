@@ -18,13 +18,11 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 public class EditProfile extends AppCompatActivity {
-    EditText txtFirstName;
-    EditText txtLastName;
-    Spinner spnrEthnicity;
+
     EditText txtPhoneNumber;
     EditText txtAddress;
     EditText txtHeight;
-    Spinner spnrBloodType;
+
     Button btnSaveChanges;
     TextView lblCancel;
     DBController db;
@@ -36,33 +34,13 @@ public class EditProfile extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
         db = new DBController(EditProfile.this);
-        txtFirstName = (EditText) findViewById(R.id.txtFirstName);
-        txtLastName = (EditText) findViewById(R.id.txtLastName);
-
-        spnrEthnicity = (Spinner) findViewById(R.id.spnrEthnicity);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapterEth = ArrayAdapter.createFromResource(this, R.array.ethnicities, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapterEth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spnrEthnicity.setAdapter(adapterEth);
 
         txtPhoneNumber = (EditText) findViewById(R.id.txtPhoneNumber);
         txtAddress = (EditText) findViewById(R.id.txtAddress);
         txtHeight = (EditText) findViewById(R.id.txtHeight);
 
-        spnrBloodType = (Spinner) findViewById(R.id.spnrBloodType);
-        ArrayAdapter<CharSequence> adapterBld = ArrayAdapter.createFromResource(this, R.array.bloodTypes, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapterBld.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spnrBloodType.setAdapter(adapterBld);
-
-
         Cursor result = db.findPatient(preferences.getString("Email",""));
         while(result.moveToNext()){
-            txtFirstName.setText(result.getString(3));
-            txtLastName.setText(result.getString(4));
             txtPhoneNumber.setText(result.getString(7));
             txtAddress.setText(result.getString(8));
             txtHeight.setText(result.getString(9));
@@ -72,28 +50,36 @@ public class EditProfile extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(spnrEthnicity.getSelectedItemPosition() == 0 || spnrBloodType.getSelectedItemPosition() == 0){
-                    Toast.makeText(EditProfile.this, "Please select ethnicity and blood type!", Toast.LENGTH_LONG).show();
+
+
+                String patientID = preferences.getString("PatientID","");
+                String phoneNumber = txtPhoneNumber.getText().toString();
+                String address = txtAddress.getText().toString();
+                String heightString = txtHeight.getText().toString();
+                float height = Float.valueOf(heightString);
+
+                if(phoneNumber.isEmpty() || address.isEmpty()){
+                    Toast.makeText(EditProfile.this, "Please enter all fields!", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    String patientID = preferences.getString("PatientID","");
-                    String firstName = txtFirstName.getText().toString();
-                    String lastName = txtLastName.getText().toString();
-                    String ethnicity = spnrEthnicity.getSelectedItem().toString();
-                    String phoneNumber = txtPhoneNumber.getText().toString();
-                    String address = txtAddress.getText().toString();
-                    String heightString = txtHeight.getText().toString();
-                    float height = Float.valueOf(heightString);
-                    String bloodType = spnrBloodType.getSelectedItem().toString();
-
-                    if(db.updatePatient(patientID,firstName,lastName,ethnicity,phoneNumber,address,height,bloodType)){
-                        Toast.makeText(EditProfile.this, "Update Successful!", Toast.LENGTH_LONG).show();
-
-                        Intent intent = new Intent(EditProfile.this, Profile.class);
-                        startActivity(intent);
+                    if(height < 20 || height > 300){
+                        Toast.makeText(EditProfile.this, "Please enter value between 20cm to 300cm", Toast.LENGTH_LONG).show();
                     }
+                    else{
+                        if(db.updatePatient(patientID,phoneNumber,address,height)){
+                            Toast.makeText(EditProfile.this, "Update Successful!", Toast.LENGTH_LONG).show();
 
+                            Intent intent = new Intent(EditProfile.this, Profile.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(EditProfile.this, "Update Failed!", Toast.LENGTH_LONG).show();
+                        }
+                    }
                 }
+
+
+
             }
         });
 
