@@ -2,6 +2,7 @@ package com.example.indoornavigationsystemforummc;
 
 public class Appointment {
     private String appointmentID;
+    private String createdDateTime;
     private String symptoms;
     private String otherDescription;
     private String appointmentDate;
@@ -18,6 +19,7 @@ public class Appointment {
 
     public Appointment(
             String appointmentID,
+            String createdDateTime,
             String symptoms,
             String otherDescription,
             String appointmentDate,
@@ -161,5 +163,13 @@ public class Appointment {
 
     public void setDoctorID(String doctorID) {
         this.doctorID = doctorID;
+    }
+
+    public String getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(String createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 }

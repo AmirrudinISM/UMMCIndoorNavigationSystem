@@ -44,12 +44,14 @@ public class CustomListAdapter extends BaseAdapter implements ListAdapter {
         TextView displayID = (TextView)view.findViewById(R.id.lblAppointmentID);
         displayID.setText(appointments.get(i).getAppointmentID());
 
-
-        TextView displayDateTime= (TextView)view.findViewById(R.id.lblDateTime);
-        displayDateTime.setText(appointments.get(i).getAppointmentDate() + ", " + appointments.get(i).getAppointmentTime());
+        TextView displayDateTime= (TextView)view.findViewById(R.id.lblAppointmentDateTime);
+        displayDateTime.setText("Appointment Date & Time: " + appointments.get(i).getAppointmentDate() + ", " + appointments.get(i).getAppointmentTime());
 
         TextView displayAppointmentStatus = (TextView) view.findViewById(R.id.lblStatus);
         displayAppointmentStatus.setText("Status: "+ appointments.get(i).getAppointmentStatus());
+
+        TextView displayCreatedDateTime = (TextView) view.findViewById(R.id.lblCreatedDateTime);
+        displayCreatedDateTime.setText("Submitted at: " + appointments.get(i).getCreatedDateTime() );
         return view;
     }
 }

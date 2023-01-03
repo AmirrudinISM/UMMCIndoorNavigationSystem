@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class DBController extends SQLiteOpenHelper{
@@ -18,7 +20,7 @@ public class DBController extends SQLiteOpenHelper{
     SQLiteDatabase db = this.getWritableDatabase();
 
     public DBController(@Nullable Context context) {
-        super(context, "UMMCMedicalAppointmentSystem.db", null, 1);
+        super(context, "UMMCMedicalAppointmentSystem.db", null, 2);
     }
 
     @Override
@@ -41,6 +43,7 @@ public class DBController extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("" +
                 "CREATE TABLE Appointments(" +
                 "AppointmentID TEXT PRIMARY KEY, " +
+                "CreatedTime TEXT," +
                 "Symptoms TEXT, " +
                 "OtherDescription TEXT, " +
                 "AppointmentDate TEXT, " +
@@ -57,8 +60,10 @@ public class DBController extends SQLiteOpenHelper{
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase DB, int i, int i1) {
+        DB.execSQL("DROP TABLE IF EXISTS Patients");
+        DB.execSQL("DROP TABLE IF EXISTS Appointments");
+        onCreate(DB);
     }
 
     public boolean createPatient(String nric, String email, String password, String firstName, String lastName, String ethnicity, String bloodType){
@@ -112,7 +117,7 @@ public class DBController extends SQLiteOpenHelper{
     public ArrayList<Appointment> getAllAppointments(String inUserID){
         ArrayList<Appointment> appointments = new ArrayList<Appointment>();
         SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT * FROM Appointments WHERE PatientID = ?";
+        String query = "SELECT * FROM Appointments WHERE PatientID = ? ORDER BY CreatedTime DESC";
         Cursor cursor = db.rawQuery(query, new String[]{inUserID});
 
         try{
@@ -123,6 +128,7 @@ public class DBController extends SQLiteOpenHelper{
             while (cursor.moveToNext()){
                 Appointment temp = new Appointment();
                 temp.setAppointmentID(cursor.getString(cursor.getColumnIndexOrThrow("AppointmentID")));
+                temp.setCreatedDateTime(cursor.getString(cursor.getColumnIndexOrThrow("CreatedTime")));
                 temp.setSymptoms(cursor.getString(cursor.getColumnIndexOrThrow("Symptoms")));
                 temp.setOtherDescription(cursor.getString(cursor.getColumnIndexOrThrow("OtherDescription")));
                 temp.setAppointmentDate(cursor.getString(cursor.getColumnIndexOrThrow("AppointmentDate")));
@@ -151,8 +157,16 @@ public class DBController extends SQLiteOpenHelper{
     }
 
     public boolean createAppointment(String allSymptoms, String otherSymptoms, String appointmentDate, String appointmentTime, String patientID) {
+        // Get the current date and time
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // Format the date and time as a string
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateTimeString = currentDateTime.format(formatter);
+
         ContentValues values = new ContentValues();
         values.put("AppointmentID", generateAppointmentID(10));
+        values.put("CreatedTime", dateTimeString);
         values.put("Symptoms", allSymptoms);
         values.put("OtherDescription", otherSymptoms);
         values.put("AppointmentDate", appointmentDate);
