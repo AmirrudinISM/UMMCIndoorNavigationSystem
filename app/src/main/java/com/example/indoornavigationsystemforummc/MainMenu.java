@@ -15,7 +15,7 @@ public class MainMenu extends AppCompatActivity {
     Button btnMedicalAppointment;
     Button btnIndoorMaps;
     Button btnProfile;
-    Button btnLogout;
+    Button btnLogout;//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
