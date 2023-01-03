@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class CreateAppointment extends AppCompatActivity {
@@ -183,7 +185,16 @@ public class CreateAppointment extends AppCompatActivity {
                 dateSelect = new DatePickerDialog(CreateAppointment.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int inYear, int inMonth, int inDay) {
-                        txtAppointmentDate.setText(inDay + "/" + (inMonth+1) + "/" + inYear);
+                        // Format the date as a string in the "yyyy-mm-dd" format
+                        String month = Integer.toString(inMonth+1);
+                        String day = Integer.toString(inDay);
+                        if(month.length() == 1){
+                            month = '0' + month;
+                        }
+                        if(day.length() == 1){
+                            day = '0' + day;
+                        }
+                        txtAppointmentDate.setText(inYear + "-" + month + "-" + day);
                     }
                 }, year, month, day);
                 dateSelect.show();
@@ -191,7 +202,7 @@ public class CreateAppointment extends AppCompatActivity {
         });
 
         //create a list of items for the spinner.
-        String[] vaccinationTimes = new String[]{"09:00AM","10:00AM","11:00AM", "12:00PM", "01:00PM", "02:00PM", "03:00PM", "04:00PM", "05:00PM"};
+        String[] vaccinationTimes = new String[]{"--SELECT TIME--","09:00AM","10:00AM","11:00AM", "12:00PM", "01:00PM", "02:00PM", "03:00PM", "04:00PM", "05:00PM"};
 
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
@@ -204,9 +215,11 @@ public class CreateAppointment extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 otherSymptoms = txtOtherSymptoms.getText().toString();
+                //symptom fields empty
                 if (symptoms.size() == 0 && otherSymptoms.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Please select at least one symptom or describe any other symptoms",Toast.LENGTH_SHORT).show();
                 }
+                //symptoms given
                 else {
                     if(symptoms.isEmpty()){
                         allSymptoms = "";
@@ -214,18 +227,40 @@ public class CreateAppointment extends AppCompatActivity {
                     else {
                         allSymptoms = concatenateSymptomsString();
                     }
-
-
                     appointmentDate = txtAppointmentDate.getText().toString();
                     appointmentTime = spnrTime.getSelectedItem().toString();
 
-                    SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
-                    String patientID = preferences.getString("PatientID","");
-                    DBController db = new DBController(CreateAppointment.this);
-                    if(db.createAppointment(allSymptoms, otherSymptoms, appointmentDate, appointmentTime, patientID)){
-                        Toast.makeText(getApplicationContext(), "Appointment creation is successful",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(CreateAppointment.this, MedicalAppointment.class);
-                        startActivity(intent);
+
+                    //date & time not selected
+                    if (appointmentDate.isEmpty() || appointmentTime.isEmpty()){
+                        //error message here
+                        Toast.makeText(getApplicationContext(), "Please select appointment date & time!",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //if selected appointment date is the same day or any other day in the past
+                        LocalDate selectedDate = LocalDate.parse(appointmentDate);
+                        if(selectedDate.compareTo(LocalDate.now()) <= 0){
+                            Toast.makeText(getApplicationContext(), "Please make an appointment at least a day before!",Toast.LENGTH_SHORT).show();
+                        }
+                        //if patient did not select any given time
+                        else {
+                            if (spnrTime.getSelectedItemPosition() == 0){
+                                Toast.makeText(getApplicationContext(), "Please select one of the given times!",Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
+                                String patientID = preferences.getString("PatientID","");
+                                DBController db = new DBController(CreateAppointment.this);
+                                if(db.createAppointment(allSymptoms, otherSymptoms, appointmentDate, appointmentTime, patientID)){
+                                    Toast.makeText(getApplicationContext(), "Appointment creation is successful",Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(CreateAppointment.this, MedicalAppointment.class);
+                                    startActivity(intent);
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Failed to save to database!",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
                     }
                 }
             }
