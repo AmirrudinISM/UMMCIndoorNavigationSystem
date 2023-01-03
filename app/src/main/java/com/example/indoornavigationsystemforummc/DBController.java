@@ -49,7 +49,9 @@ public class DBController extends SQLiteOpenHelper{
                 "AppointmentDate TEXT, " +
                 "AppointmentTime TEXT, " +
                 "AppointmentStatus TEXT," +
+                //remember to make this REAL (decimal)
                 "Weight TEXT," +
+                //make this one real too
                 "BloodPressure TEXT," +
                 "Temperature REAL," +
                 "OxygenLevel REAL," +
@@ -187,5 +189,51 @@ public class DBController extends SQLiteOpenHelper{
         return true;
     }
 
+    public Cursor getAppointment(String appointmentID){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM Appointments WHERE appointmentID = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{appointmentID});
+        return cursor;
+    }
 
+    public boolean cancelAppointment(String appointmentID){
+        ContentValues values = new ContentValues();
+
+        // on below line we are passing all values
+        // along with its key and value pair.
+        values.put("AppointmentStatus", "CANCELLED");
+
+
+        // on below line we are calling a update method to update our database and passing our values.
+        // and we are comparing it with name of our course which is stored in original name variable.
+        db.update("Appointments", values, "AppointmentID = ?", new String[]{appointmentID});
+        db.close();
+        return true;
+
+    }
+
+    public void refreshAppointments() {
+        ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT AppointmentID,AppointmentDate,AppointmentTime,AppointmentStatus FROM Appointments ORDER BY CreatedTime DESC";
+        Cursor cursor = db.rawQuery(query,null);
+
+        //get relevant appointment values from database and put them into arraylist.
+        while (cursor.moveToNext()){
+            Appointment temp = new Appointment();
+            temp.setAppointmentID(cursor.getString(cursor.getColumnIndexOrThrow("AppointmentID")));
+            temp.setAppointmentDate(cursor.getString(cursor.getColumnIndexOrThrow("AppointmentDate")));
+            temp.setAppointmentTime(cursor.getString(cursor.getColumnIndexOrThrow("AppointmentTime")));
+            temp.setAppointmentStatus(cursor.getString(cursor.getColumnIndexOrThrow("AppointmentStatus")));
+            appointments.add(temp);
+        }
+
+        /*** TODO
+         1. Compare current date
+         2. Compare time
+         3. Update appointment status to "MISSED"
+         4. Update database
+         ***/
+
+    }
 }
