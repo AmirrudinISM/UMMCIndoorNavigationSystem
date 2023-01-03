@@ -13,11 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private EditText txtEmail;
     private EditText txtPassword;
     private Button btnLogin;
     private TextView lblRegister;
+    private TextView lblReturnHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         txtPassword = (EditText) findViewById(R.id.passwordInput);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         lblRegister = (TextView) findViewById(R.id.lblRegister);
+        lblReturnHome = (TextView) findViewById(R.id.lblReturnToHome);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
                 String email= txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
 
-                if(email != null){
-                    DBController dbController = new DBController(MainActivity.this);
+                if(!email.isEmpty()){
+                    DBController dbController = new DBController(Login.this);
                     Cursor result = dbController.findPatient(email);
 
                     if(result.getCount()==0){
-                        Toast.makeText(MainActivity.this, "User with this email doesn't exist! ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Login.this, "User with this email doesn't exist! ", Toast.LENGTH_LONG).show();
                     }else{
                         while(result.moveToNext()){
                             if(result.getString(2).equals(password)){
@@ -52,20 +54,21 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putString("PatientID", result.getString(0) );
                                 editor.putString("Email",result.getString(1) );
                                 editor.putString("FirstName",result.getString(3) );
+                                editor.putBoolean("Login",true);
 
 
-                                editor.commit();
+                                editor.apply();
 
-                                Intent intent = new Intent(MainActivity.this, MainMenu.class);
+                                Intent intent = new Intent(Login.this, MainMenu.class);
                                 startActivity(intent);
                             }else{
-                                Toast.makeText(MainActivity.this, "Incorrect password", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Login.this, "Incorrect password", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
                 }
                 else{
-                    Toast.makeText(MainActivity.this, "Please provide email!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Please provide email!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -73,7 +76,15 @@ public class MainActivity extends AppCompatActivity {
         lblRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,Register.class);
+                Intent intent = new Intent(Login.this,Register.class);
+                startActivity(intent);
+            }
+        });
+
+        lblReturnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Login.this,MainMenu.class);
                 startActivity(intent);
             }
         });

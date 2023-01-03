@@ -48,7 +48,7 @@ public class Register extends AppCompatActivity {
                         //if email is still available
                         if (dbController.createPatient(nric,email,password)){
                             Toast.makeText(getApplicationContext(), "Registration SUCCESSFUL!",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Register.this, MainActivity.class);
+                            Intent intent = new Intent(Register.this, Login.class);
                             startActivity(intent);
                         }
                         else{
@@ -66,7 +66,7 @@ public class Register extends AppCompatActivity {
         lblCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Register.this, MainActivity.class);
+                Intent intent = new Intent(Register.this, Login.class);
                 startActivity(intent);
             }
         });
