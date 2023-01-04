@@ -15,7 +15,7 @@ public class MainMenu extends AppCompatActivity {
     Button btnMedicalAppointment;
     Button btnIndoorMaps;
     Button btnProfile;
-    Button btnLogout;//
+    Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,21 +74,29 @@ public class MainMenu extends AppCompatActivity {
         });
 
         if(preferences.getBoolean("Login",false)){
-            btnLogout.setVisibility(View.VISIBLE);
+            btnLogout.setText("Logout");
         }
         else {
-            btnLogout.setVisibility(View.GONE);
+            btnLogout.setText("Login");
         }
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("Login", false);
-                editor.apply();
 
-                Intent intent = new Intent(MainMenu.this, MainMenu.class);
-                startActivity(intent);
-                finish();
+                //if logged in
+                if(preferences.getBoolean("Login",false)){
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("Login", false);
+                    editor.apply();
+
+                    Intent intent = new Intent(MainMenu.this, MainMenu.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Intent intent = new Intent(MainMenu.this, Login.class);
+                    startActivity(intent);
+                }
             }
         });
 

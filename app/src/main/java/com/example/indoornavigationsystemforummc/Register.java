@@ -70,7 +70,7 @@ public class Register extends AppCompatActivity {
 
                 //fields are empty
                 if(nric.isEmpty() || email.isEmpty() || password.isEmpty() || reconfirm.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || spnrEthnicity.getSelectedItemPosition() == 0 || spnrBloodType.getSelectedItemPosition() == 0){
-                    Toast.makeText(getApplicationContext(), "Please provide email and password",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please provide all required information",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     //passwords are equal

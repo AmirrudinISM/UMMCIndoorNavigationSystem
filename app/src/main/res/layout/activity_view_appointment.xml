@@ -21,6 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20sp"
                 android:text="Appointment Details"
+                android:background="#EE44EE"
                 android:textSize="20sp"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,9 +68,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Patient Symptoms"
+                android:background="#EE44EE"
                 android:textSize="20sp"/>
 
             <TextView
+                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Common Symptoms:"
@@ -88,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Other Symptoms: "
+                android:textStyle="bold"
                 android:textSize="18sp"/>
 
             <TextView
@@ -104,6 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Patient Condition"
+                android:background="#EE44EE"
                 android:textSize="20sp"/>
 
             <TextView
