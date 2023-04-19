@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import es.situm.sdk.SitumSdk;
+
 public class MainMenu extends AppCompatActivity {
     TextView status;
     Button btnMedicalAppointment;
@@ -20,6 +22,7 @@ public class MainMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SitumSdk.init(this);
         setContentView(R.layout.activity_main_menu);
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
         status = (TextView) findViewById(R.id.statusDisplay2);
