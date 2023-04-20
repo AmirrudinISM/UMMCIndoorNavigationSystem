@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">IndoorNavigationSystemForUMMC</string>
     <string name="email">ismailconga@gmail.com</string>
-    <string name="situm_key">c7e1e3c250a4606e428cbc6e89441e76150ad0a2ddb52ffa8253a1417b9279f0</string>
-    <string name="gmaps_key">AIzaSyA49TyPU5vI8hSWCqU1p5ZKJfhWpwYap3g</string>
+
 
     <string-array name="ethnicities">
         <item>--SELECT ETHNICITY--</item>
