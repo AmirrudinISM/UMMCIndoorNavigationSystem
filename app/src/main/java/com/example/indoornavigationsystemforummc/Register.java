@@ -58,6 +58,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //account info
+
                 String nric = txtNRIC.getText().toString();
                 String email = txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
@@ -75,10 +76,11 @@ public class Register extends AppCompatActivity {
                 else{
                     //passwords are equal
                     if (password.contentEquals(reconfirm)){
-                        DBController dbController = new DBController(Register.this);
+                        DBConn dbConn = new DBConn(Register.this);
                         //if email is still available
-                        if (dbController.createPatient(nric,email,password, firstName, lastName, ethnicity, bloodType)){
-                            Toast.makeText(getApplicationContext(), "Registration SUCCESSFUL!",Toast.LENGTH_SHORT).show();
+                        Patient inPatient = new Patient(nric,email,password, firstName, lastName, ethnicity, bloodType);
+                        if (dbConn.registerPatient(inPatient)){
+
                             Intent intent = new Intent(Register.this, Login.class);
                             startActivity(intent);
                         }

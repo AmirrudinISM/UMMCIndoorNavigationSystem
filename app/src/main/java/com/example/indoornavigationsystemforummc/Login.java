@@ -13,6 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Objects;
+
 public class Login extends AppCompatActivity {
     private EditText txtEmail;
     private EditText txtPassword;
@@ -40,32 +45,48 @@ public class Login extends AppCompatActivity {
                 String password = txtPassword.getText().toString();
 
                 if(!email.isEmpty()){
-                    DBController dbController = new DBController(Login.this);
-                    Cursor result = dbController.findPatient(email);
+                    Patient inPatient = new Patient();
+                    DBConn dbConn = new DBConn(Login.this);
+                    try {
+                        dbConn.login(email, password, new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) throws JSONException {
+                                inPatient.setPatientID(result.getString("patientID"));
+                                inPatient.setEmail(result.getString("email"));
+                                inPatient.setPassword(result.getString("password"));
+                                inPatient.setFirstName(result.getString("firstName"));
+                                Toast.makeText(Login.this, "Patient ID: " + inPatient.getPatientID(), Toast.LENGTH_LONG).show();
 
-                    if(result.getCount()==0){
-                        Toast.makeText(Login.this, "User with this email doesn't exist! ", Toast.LENGTH_LONG).show();
-                    }else{
-                        while(result.moveToNext()){
-                            if(result.getString(2).equals(password)){
+                                if(inPatient.getPatientID() == null){
+                                    Toast.makeText(Login.this, "User with this email doesn't exist! ", Toast.LENGTH_LONG).show();
+                                }else{
 
-                                SharedPreferences.Editor editor = preferences.edit();
+                                    if(Objects.equals(inPatient.getPassword(), password)){
 
-                                editor.putString("PatientID", result.getString(0) );
-                                editor.putString("Email",result.getString(1) );
-                                editor.putString("FirstName",result.getString(3) );
-                                editor.putBoolean("Login",true);
+                                        SharedPreferences.Editor editor = preferences.edit();
+
+                                        editor.putString("PatientID", inPatient.getPatientID() );
+                                        editor.putString("Email",inPatient.getEmail() );
+                                        editor.putString("FirstName",inPatient.getFirstName() );
+                                        editor.putBoolean("Login",true);
 
 
-                                editor.apply();
+                                        editor.apply();
 
-                                Intent intent = new Intent(Login.this, MainMenu.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(Login.this, "Incorrect password", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(Login.this, MainMenu.class);
+                                        startActivity(intent);
+                                    }else{
+                                        Toast.makeText(Login.this, "Incorrect password", Toast.LENGTH_LONG).show();
+                                    }
+
+                                }
                             }
-                        }
+                        });
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
+
+
                 }
                 else{
                     Toast.makeText(Login.this, "Please provide email!", Toast.LENGTH_LONG).show();
