@@ -1,4 +1,4 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.medicalappointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.unikl.indoornavigationsystemforummc.utils.DBController;
+import com.example.indoornavigationsystemforummc.R;
 
 import java.time.LocalDate;
 
@@ -37,12 +40,12 @@ public class ViewAppointment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_appointment);
 
-        DBController db = new DBController(this);
+
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
 
         String appointmentID = getIntent().getStringExtra("appointmentID");
-        Cursor cursor = db.getAppointment(appointmentID);
+
 
 
         while (cursor.moveToNext()){

@@ -1,4 +1,4 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.navigation;
 
 import androidx.appcompat.app.AppCompatActivity;
 

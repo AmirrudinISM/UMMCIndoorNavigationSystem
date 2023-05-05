@@ -1,4 +1,4 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,9 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.unikl.indoornavigationsystemforummc.utils.DBController;
+import com.unikl.indoornavigationsystemforummc.main.MainMenu;
+import com.example.indoornavigationsystemforummc.R;
 
 public class Profile extends AppCompatActivity {
     TextView lblPatientID;

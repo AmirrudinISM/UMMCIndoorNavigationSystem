@@ -35,49 +35,49 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <activity
-            android:name=".IndoorNavigation"
+            android:name="com.unikl.indoornavigationsystemforummc.navigation.IndoorNavigation"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ViewAppointment"
+            android:name="com.unikl.indoornavigationsystemforummc.medicalappointment.ViewAppointment"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".CreateAppointment"
+            android:name="com.unikl.indoornavigationsystemforummc.medicalappointment.CreateAppointment"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".MedicalAppointment"
+            android:name="com.unikl.indoornavigationsystemforummc.medicalappointment.MedicalAppointment"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".EditProfile"
+            android:name="com.unikl.indoornavigationsystemforummc.profile.EditProfile"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Profile"
+            android:name="com.unikl.indoornavigationsystemforummc.profile.Profile"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainMenu"
+            android:name="com.unikl.indoornavigationsystemforummc.main.MainMenu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -90,14 +90,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Register"
+            android:name="com.unikl.indoornavigationsystemforummc.main.Register"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Login"
+            android:name="com.unikl.indoornavigationsystemforummc.main.Login"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

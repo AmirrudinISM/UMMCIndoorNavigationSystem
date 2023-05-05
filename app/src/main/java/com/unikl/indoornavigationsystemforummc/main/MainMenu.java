@@ -1,4 +1,4 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.indoornavigationsystemforummc.R;
+import com.unikl.indoornavigationsystemforummc.medicalappointment.MedicalAppointment;
+import com.unikl.indoornavigationsystemforummc.navigation.IndoorNavigation;
+import com.unikl.indoornavigationsystemforummc.profile.Profile;
 
 import es.situm.sdk.SitumSdk;
 

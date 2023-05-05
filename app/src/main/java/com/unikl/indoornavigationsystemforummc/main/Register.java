@@ -1,4 +1,4 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.indoornavigationsystemforummc.R;
+import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 
 public class Register extends AppCompatActivity {
     private EditText txtNRIC;

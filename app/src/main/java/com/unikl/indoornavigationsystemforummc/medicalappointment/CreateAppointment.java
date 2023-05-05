@@ -1,4 +1,4 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.medicalappointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,8 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.unikl.indoornavigationsystemforummc.utils.DBConn;
+import com.example.indoornavigationsystemforummc.R;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class CreateAppointment extends AppCompatActivity {
@@ -202,7 +204,7 @@ public class CreateAppointment extends AppCompatActivity {
         });
 
         //create a list of items for the spinner.
-        String[] vaccinationTimes = new String[]{"--SELECT TIME--","09:00AM","10:00AM","11:00AM", "12:00PM", "01:00PM", "02:00PM", "03:00PM", "04:00PM", "05:00PM"};
+        String[] vaccinationTimes = new String[]{"--SELECT TIME--","09:00:00","10:00:00","11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00"};
 
         //create an adapter to describe how the items are displayed, adapters are used in several places in android.
         //There are multiple variations of this, but this is the basic variant.
@@ -250,15 +252,19 @@ public class CreateAppointment extends AppCompatActivity {
                             else {
                                 SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
                                 String patientID = preferences.getString("PatientID","");
-                                DBController db = new DBController(CreateAppointment.this);
-                                if(db.createAppointment(allSymptoms, otherSymptoms, appointmentDate, appointmentTime, patientID)){
-                                    Toast.makeText(getApplicationContext(), "Appointment creation is successful",Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(CreateAppointment.this, MedicalAppointment.class);
-                                    startActivity(intent);
-                                }
-                                else{
-                                    Toast.makeText(getApplicationContext(), "Failed to save to database!",Toast.LENGTH_SHORT).show();
-                                }
+                                DBConn db = new DBConn(CreateAppointment.this);
+                                Appointment inAppointment = new Appointment();
+                                inAppointment.setSymptoms(allSymptoms);
+                                inAppointment.setOtherDescription(otherSymptoms);
+                                inAppointment.setAppointmentDate(appointmentDate);
+                                inAppointment.setAppointmentTime(appointmentTime);
+                                inAppointment.setPatientID(patientID);
+                                db.createAppointment(inAppointment);
+
+                                Intent intent = new Intent(CreateAppointment.this, MedicalAppointment.class);
+                                startActivity(intent);
+
+
                             }
                         }
                     }

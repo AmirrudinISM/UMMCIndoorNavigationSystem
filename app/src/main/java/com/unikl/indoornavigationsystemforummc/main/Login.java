@@ -1,17 +1,21 @@
-package com.example.indoornavigationsystemforummc;
+package com.unikl.indoornavigationsystemforummc.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.indoornavigationsystemforummc.R;
+import com.unikl.indoornavigationsystemforummc.utils.DBConn;
+import com.unikl.indoornavigationsystemforummc.utils.JsonObjectCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,11 +48,11 @@ public class Login extends AppCompatActivity {
                 String email= txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
 
-                if(!email.isEmpty()){
+                if(!email.isEmpty() && !password.isEmpty()){
                     Patient inPatient = new Patient();
                     DBConn dbConn = new DBConn(Login.this);
                     try {
-                        dbConn.login(email, password, new ServerCallback() {
+                        dbConn.login(email, password, new JsonObjectCallback() {
                             @Override
                             public void onSuccess(JSONObject result) throws JSONException {
                                 inPatient.setPatientID(result.getString("patientID"));
@@ -83,13 +87,11 @@ public class Login extends AppCompatActivity {
                             }
                         });
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        Log.d("Error", e.getMessage());
                     }
-
-
                 }
                 else{
-                    Toast.makeText(Login.this, "Please provide email!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Please provide email & password!", Toast.LENGTH_LONG).show();
                 }
             }
         });
