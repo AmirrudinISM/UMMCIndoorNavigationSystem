@@ -11,8 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.utils.DBController;
 import com.example.indoornavigationsystemforummc.R;
+import com.unikl.indoornavigationsystemforummc.utils.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 
@@ -41,86 +46,105 @@ public class ViewAppointment extends AppCompatActivity {
         setContentView(R.layout.activity_view_appointment);
 
 
+        btnCancelAppointment= findViewById(R.id.btnCancelAppointment);
+        tvAppointmentID = findViewById(R.id.tvAppointmentID);
+        tvStatus = findViewById(R.id.tvAppointmentStatus);
+        tvAppointmentDateAndTime = (TextView) findViewById(R.id.tvAppointmentDateAndTime);
+        tvDoctorID = (TextView)findViewById(R.id.tvDoctorID);
+        tvCommonSymptoms = (TextView) findViewById(R.id.tvCommonSymptoms);
+        tvOtherSymptoms = (TextView) findViewById(R.id.tvOtherSymptoms);
+        tvWeight = (TextView) findViewById(R.id.tvWeight);
+        tvBloodPressure = (TextView) findViewById(R.id.tvBloodPressure);
+        tvTemperature = (TextView) findViewById(R.id.tvTemperature);
+        tvOxygenLevel = (TextView) findViewById(R.id.tvOxygenLevel);
+        tvDiagnosis = (TextView) findViewById(R.id.tvDiagnosis);
+        tvAdditionalNotes = (TextView) findViewById(R.id.tvAdditionalNotes);
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
 
         String appointmentID = getIntent().getStringExtra("appointmentID");
 
+        DBConn dbConn = new DBConn(ViewAppointment.this);
+
+        dbConn.viewAppointment(appointmentID, new StringCallback() {
+            @Override
+            public void onSuccess(String response) throws JSONException {
+
+                JSONObject appointmentJSON = new JSONObject(response);
+
+                System.out.println(response);
+
+                appointmentIDString = appointmentJSON.getString("appointmentID");
+                tvAppointmentID.setText("Appointment ID: " + appointmentIDString);
 
 
-        while (cursor.moveToNext()){
-            tvAppointmentID = findViewById(R.id.tvAppointmentID);
-            appointmentIDString = cursor.getString(0);
-            tvAppointmentID.setText("Appointment ID: " + cursor.getString(0));
+                appointmentStatusString = appointmentJSON.getString("appointmentStatus");
+                tvStatus.setText("Status: " + appointmentStatusString);
 
-            tvStatus = findViewById(R.id.tvAppointmentStatus);
-            appointmentStatusString = cursor.getString(6);
-            tvStatus.setText("Status: " + cursor.getString(6));
+                String date = appointmentJSON.getString("appointmentDate");
+                appointmentDateString = date;
+                String time = appointmentJSON.getString("appointmentTime");
 
-            String date = cursor.getString(4);
-            appointmentDateString = cursor.getString(4);
-            String time = cursor.getString(5);
-            tvAppointmentDateAndTime = (TextView) findViewById(R.id.tvAppointmentDateAndTime);
-            tvAppointmentDateAndTime.setText("Appointment Date & Time: " + date + ", " + time);
+                tvAppointmentDateAndTime.setText("Appointment Date & Time: " + date + ", " + time);
 
-            tvDoctorID = (TextView)findViewById(R.id.tvDoctorID);
-            if(cursor.getString(14).isEmpty()){
-                tvDoctorID.setText("Doctor ID: ");
+                System.out.println("DoctorID: " + appointmentJSON.getString("doctorID"));
+                if(appointmentJSON.getString("doctorID").isEmpty()){
+                    tvDoctorID.setText("Doctor ID: ");
+                }
+                else {
+                    tvDoctorID.setText("Doctor ID: " + appointmentJSON.getString("doctorID"));
+                }
+
+                System.out.println("Symptoms: " + appointmentJSON.getString("symptoms"));
+                if(appointmentJSON.getString("symptoms").isEmpty()){
+                    tvCommonSymptoms.setText("");
+                }
+                else {
+                    tvCommonSymptoms.setText(appointmentJSON.getString("symptoms"));
+                }
+
+                System.out.println("Other Description: " + appointmentJSON.getString("otherDescription"));
+                if(appointmentJSON.getString("otherDescription").isEmpty()){
+                    tvOtherSymptoms.setText("");
+                }
+                else{
+                    tvOtherSymptoms.setText(appointmentJSON.getString("otherDescription"));
+                }
+
+                System.out.println("Weight: " + appointmentJSON.getDouble("weight"));
+                tvWeight.setText("Weight (kg): " + appointmentJSON.getDouble("weight"));
+
+                System.out.println("Blood Pressure: " + appointmentJSON.getDouble("bloodPressure"));
+                tvBloodPressure.setText("Blood Pressure (mmHg): " + appointmentJSON.getDouble("bloodPressure"));
+
+                System.out.println("Temperature: " + appointmentJSON.getDouble("temperature"));
+                tvTemperature.setText("Temperature (°C): " + appointmentJSON.getDouble("temperature"));
+
+                System.out.println("Oxygen Level: " + appointmentJSON.getDouble("oxygenLevel"));
+                tvOxygenLevel.setText("Oxygen Level (%): " + appointmentJSON.getDouble("oxygenLevel"));
+
+
+                if(appointmentJSON.getString("diagnosis").isEmpty()){
+                    tvDiagnosis.setText("Diagnosis: ");
+                }
+                else{
+                    tvDiagnosis.setText("Diagnosis: " + appointmentJSON.getString("diagnosis"));
+                }
+
+
+                if(appointmentJSON.getString("additionalNotes").isEmpty()){
+                    tvAdditionalNotes.setText("Additional Notes: ");
+                }
+                else{
+                    tvAdditionalNotes.setText("Additional Notes: " + appointmentJSON.getString("additionalNotes"));
+                }
+
+                if(appointmentStatusString.equals("CANCELLED")){
+                    btnCancelAppointment.setVisibility(View.GONE);
+                }
             }
-            else {
-                tvDoctorID.setText("Doctor ID: " + cursor.getString(14));
-            }
+        });
 
-            tvCommonSymptoms = (TextView) findViewById(R.id.tvCommonSymptoms);
-            if(cursor.getString(2).isEmpty()){
-                tvCommonSymptoms.setText("");
-            }
-            else {
-                tvCommonSymptoms.setText(cursor.getString(2));
-            }
-
-            tvOtherSymptoms = (TextView) findViewById(R.id.tvOtherSymptoms);
-            if(cursor.getString(3).isEmpty()){
-                tvOtherSymptoms.setText("");
-            }
-            else{
-                tvOtherSymptoms.setText(cursor.getString(3));
-            }
-
-            tvWeight = (TextView) findViewById(R.id.tvWeight);
-            tvWeight.setText("Weight (kg): " + cursor.getString(7));
-
-            tvBloodPressure = (TextView) findViewById(R.id.tvBloodPressure);
-            tvBloodPressure.setText("Blood Pressure (mmHg): " + cursor.getString(8));
-
-            tvTemperature = (TextView) findViewById(R.id.tvTemperature);
-            tvTemperature.setText("Temperature (°C): " + cursor.getString(9));
-
-            tvOxygenLevel = (TextView) findViewById(R.id.tvOxygenLevel);
-            tvOxygenLevel.setText("Oxygen Level (%): " + cursor.getString(10));
-
-            tvDiagnosis = (TextView) findViewById(R.id.tvDiagnosis);
-            if(cursor.getString(12).isEmpty()){
-                tvDiagnosis.setText("Diagnosis: ");
-            }
-            else{
-                tvDiagnosis.setText("Diagnosis: " + cursor.getString(12));
-            }
-
-            tvAdditionalNotes = (TextView) findViewById(R.id.tvAdditionalNotes);
-            if(cursor.getString(11).isEmpty()){
-                tvAdditionalNotes.setText("Additional Notes: ");
-            }
-            else{
-                tvAdditionalNotes.setText("Additional Notes: " + cursor.getString(11));
-            }
-        }
-
-
-        btnCancelAppointment= findViewById(R.id.btnCancelAppointment);
-        if(appointmentStatusString.equals("CANCELLED")){
-            btnCancelAppointment.setVisibility(View.GONE);
-        }
         btnCancelAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,11 +155,14 @@ public class ViewAppointment extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Cannot cancel appointment on the day before or the day itself!",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    if(db.cancelAppointment(appointmentIDString)){
-                        Toast.makeText(getApplicationContext(), "Appointment successfully CANCELLED!",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ViewAppointment.this, MedicalAppointment.class);
-                        startActivity(intent);
-                    }
+                    dbConn.cancelAppointment(appointmentID, new StringCallback() {
+                        @Override
+                        public void onSuccess(String response) throws JSONException {
+                            Toast.makeText(getApplicationContext(), "Appointment successfully CANCELLED!",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ViewAppointment.this, MedicalAppointment.class);
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
         });

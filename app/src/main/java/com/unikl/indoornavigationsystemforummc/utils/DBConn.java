@@ -221,4 +221,38 @@ public class DBConn {
         };
         queue.add(stringRequest);
     }
+
+    public void cancelAppointment(String appointmentID, StringCallback callback){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            callback.onSuccess(response);
+                        } catch (JSONException e) {
+                            Log.d("ERROR", e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Log.d("Error", error.getMessage());
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("action", "cancelAppointment");
+                params.put("appointmentID", appointmentID);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
 }
