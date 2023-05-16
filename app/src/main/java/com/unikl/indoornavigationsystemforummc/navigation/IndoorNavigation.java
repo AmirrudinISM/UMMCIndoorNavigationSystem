@@ -84,7 +84,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 //        if (intent != null)
 //            if (intent.hasExtra(Intent.EXTRA_TEXT))
 ////                buildingId = intent.getStringExtra(Intent.EXTRA_TEXT);
-        buildingId = "13156";
+        buildingId = "13504";
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

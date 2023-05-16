@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class MedicalAppointment extends AppCompatActivity {
     ListView listView;
     FloatingActionButton btnCreateNewAppointment;
     FloatingActionButton btnReturnHome;
+    ProgressBar progressBar;
     int pendingOrConfirmed;
 
     @Override
@@ -39,9 +41,8 @@ public class MedicalAppointment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medical_appointment);
 
-        //DBController db = new DBController(this);
-        //db.refreshAppointments();
-
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         listView = findViewById(R.id.appointmentList);
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
@@ -52,6 +53,7 @@ public class MedicalAppointment extends AppCompatActivity {
 
             @Override
             public void onSuccess(String response) throws JSONException {
+                progressBar.setVisibility(View.GONE);
                 pendingOrConfirmed = 0;
                 JSONArray respArray = new JSONArray(response);
                 ArrayList<Appointment> appointments = new ArrayList<Appointment>();

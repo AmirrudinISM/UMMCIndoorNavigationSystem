@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class Login extends AppCompatActivity {
     private Button btnLogin;
     private TextView lblRegister;
     private TextView lblReturnHome;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,13 @@ public class Login extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         lblRegister = (TextView) findViewById(R.id.lblRegister);
         lblReturnHome = (TextView) findViewById(R.id.lblReturnToHome);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 String email= txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
 
@@ -55,6 +60,7 @@ public class Login extends AppCompatActivity {
                         dbConn.login(email, password, new JsonObjectCallback() {
                             @Override
                             public void onSuccess(JSONObject result) throws JSONException {
+                                progressBar.setVisibility(View.GONE);
                                 inPatient.setPatientID(result.getString("patientID"));
                                 inPatient.setEmail(result.getString("email"));
                                 inPatient.setPassword(result.getString("password"));
