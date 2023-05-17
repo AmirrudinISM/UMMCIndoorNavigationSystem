@@ -98,7 +98,7 @@ public class DBConn {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Error connecting", Toast.LENGTH_LONG).show();
+                callback.onFailure();
             }
         });
 
@@ -174,7 +174,7 @@ public class DBConn {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error){
-                        Log.d("Error", error.getMessage());
+                        callback.onFailure();
                     }
                 }){
             @Override

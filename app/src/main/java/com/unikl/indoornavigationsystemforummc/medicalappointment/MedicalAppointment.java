@@ -3,7 +3,6 @@ package com.unikl.indoornavigationsystemforummc.medicalappointment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,13 +12,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.unikl.indoornavigationsystemforummc.main.Login;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
-import com.unikl.indoornavigationsystemforummc.utils.DBController;
 import com.unikl.indoornavigationsystemforummc.main.MainMenu;
 import com.example.indoornavigationsystemforummc.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.unikl.indoornavigationsystemforummc.utils.JsonArrayCallback;
-import com.unikl.indoornavigationsystemforummc.utils.JsonObjectCallback;
 import com.unikl.indoornavigationsystemforummc.utils.StringCallback;
 
 import org.json.JSONArray;
@@ -74,6 +71,12 @@ public class MedicalAppointment extends AppCompatActivity {
 
                 CustomListAdapter adapter = new CustomListAdapter(appointments, MedicalAppointment.this);
                 listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure() {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(MedicalAppointment.this, "Error connecting", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -143,6 +143,11 @@ public class ViewAppointment extends AppCompatActivity {
                     btnCancelAppointment.setVisibility(View.GONE);
                 }
             }
+
+            @Override
+            public void onFailure() {
+
+            }
         });
 
         btnCancelAppointment.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +166,11 @@ public class ViewAppointment extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Appointment successfully CANCELLED!",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ViewAppointment.this, MedicalAppointment.class);
                             startActivity(intent);
+                        }
+
+                        @Override
+                        public void onFailure() {
+
                         }
                     });
                 }

@@ -91,12 +91,20 @@ public class Login extends AppCompatActivity {
 
                                 }
                             }
+
+                            @Override
+                            public void onFailure() {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(Login.this, "Error connecting", Toast.LENGTH_LONG).show();
+                            }
                         });
                     } catch (JSONException e) {
+                        progressBar.setVisibility(View.GONE);
                         Log.d("Error", e.getMessage());
                     }
                 }
                 else{
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(Login.this, "Please provide email & password!", Toast.LENGTH_LONG).show();
                 }
             }
