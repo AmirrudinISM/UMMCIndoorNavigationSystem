@@ -170,7 +170,7 @@ public class ViewAppointment extends AppCompatActivity {
 
                         @Override
                         public void onFailure() {
-
+                            Toast.makeText(getApplicationContext(), "Failed to cancel appointment!",Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
