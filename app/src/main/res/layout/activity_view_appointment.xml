@@ -109,7 +109,7 @@
                 android:layout_marginVertical="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Patient Condition"
+                android:text="Patient's Vitals"
                 android:background="#EE44EE"
                 android:textSize="20sp"/>
 
@@ -124,7 +124,7 @@
                 android:id="@+id/tvBloodPressure"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Blood Pressure (mmHg): "
+                android:text="Blood Pressure Systolic (mmHg): "
                 android:textSize="18sp"/>
 
             <TextView
