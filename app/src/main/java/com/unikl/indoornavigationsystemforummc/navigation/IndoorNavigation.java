@@ -81,10 +81,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         locationManager = SitumSdk.locationManager();
 
         Intent intent = getIntent();
-//        if (intent != null)
-//            if (intent.hasExtra(Intent.EXTRA_TEXT))
-////                buildingId = intent.getStringExtra(Intent.EXTRA_TEXT);
-        buildingId = "13504";
+        if (intent != null)
+            if (intent.hasExtra(Intent.EXTRA_TEXT))
+                buildingId = intent.getStringExtra(Intent.EXTRA_TEXT);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

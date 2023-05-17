@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.indoornavigationsystemforummc.R;
 import com.unikl.indoornavigationsystemforummc.medicalappointment.MedicalAppointment;
 import com.unikl.indoornavigationsystemforummc.navigation.IndoorNavigation;
+import com.unikl.indoornavigationsystemforummc.navigation.SelectBuildingActivity;
 import com.unikl.indoornavigationsystemforummc.profile.Profile;
 
 import es.situm.sdk.SitumSdk;
@@ -61,7 +62,7 @@ public class MainMenu extends AppCompatActivity {
         btnIndoorMaps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainMenu.this, IndoorNavigation.class);
+                Intent intent = new Intent(MainMenu.this, SelectBuildingActivity.class);
                 startActivity(intent);
             }
         });
