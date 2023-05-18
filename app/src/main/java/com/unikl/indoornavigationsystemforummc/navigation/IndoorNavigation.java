@@ -1,15 +1,19 @@
 package com.unikl.indoornavigationsystemforummc.navigation;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.indoornavigationsystemforummc.R;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import androidx.core.app.ActivityCompat;
@@ -17,6 +21,8 @@ import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 //import es.situm.gettingstarted.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,15 +40,29 @@ import com.google.android.gms.maps.model.MarkerOptions;
 //import es.situm.gettingstarted.common.floorselector.FloorSelectorView;
 //import es.situm.gettingstarted.common.GetBuildingCaseUse;
 //import es.situm.gettingstarted.common.SampleActivity;
+import java.util.ArrayList;
+import java.util.List;
+
 import es.situm.sdk.SitumSdk;
+import es.situm.sdk.directions.DirectionsRequest;
 import es.situm.sdk.error.Error;
 import es.situm.sdk.location.LocationListener;
 import es.situm.sdk.location.LocationManager;
 import es.situm.sdk.location.LocationRequest;
 import es.situm.sdk.location.LocationStatus;
+import es.situm.sdk.location.util.CoordinateConverter;
 import es.situm.sdk.model.cartography.Building;
 import es.situm.sdk.model.cartography.Floor;
+import es.situm.sdk.model.cartography.Point;
+import es.situm.sdk.model.directions.Route;
+import es.situm.sdk.model.directions.RouteSegment;
+import es.situm.sdk.model.location.CartesianCoordinate;
+import es.situm.sdk.model.location.Coordinate;
 import es.situm.sdk.model.location.Location;
+import es.situm.sdk.model.navigation.NavigationProgress;
+import es.situm.sdk.navigation.NavigationListener;
+import es.situm.sdk.navigation.NavigationRequest;
+import es.situm.sdk.utils.Handler;
 
 public class IndoorNavigation extends SampleActivity implements OnMapReadyCallback {
     private static final int ACCESS_FINE_LOCATION_REQUEST_CODE = 3096;
@@ -73,6 +93,17 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     PositionAnimator positionAnimator = new PositionAnimator();
 
     private ProgressBar progressBar;
+
+    private Marker markerDestination;
+    private CoordinateConverter coordinateConverter;
+    String currentFloorId;
+    Point to;
+    Boolean navigation = false;
+    private NavigationRequest navigationRequest;
+    private List<Polyline> polylines = new ArrayList<>();
+    private TextView mNavText;
+    private RelativeLayout navigationLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -112,17 +143,23 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        map = googleMap;
+        this.map = googleMap;
 
         getBuildingCaseUse.get(buildingId, new GetBuildingCaseUse.Callback() {
+
             @Override
             public void onSuccess(Building build, Floor floor, Bitmap bitmap) {
                 progressBar.setVisibility(View.GONE);
                 building = build;
-
+                coordinateConverter = new CoordinateConverter(building.getDimensions(),building.getCenter(),building.getRotation());
                 // Once we got the building and the googleMap, instance a new FloorSelector
                 floorSelectorView = findViewById(R.id.situm_floor_selector);
                 floorSelectorView.setFloorSelector(building, map);
+
+                map.setOnMapClickListener(latLng -> {
+                    getPoint(map, latLng);
+                    Log.d("DESTINATION", to.toString());
+                });
             }
 
             @Override
@@ -134,13 +171,35 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 
     }
 
+    private void getPoint(GoogleMap googleMap, LatLng latLng) {
+        removePolylines();
+        if (markerDestination != null) {
+            markerDestination.remove();
+        }
+
+        //creates destinationPoint on the map by converting latLong value
+        to = createPoint(latLng);
+
+        markerDestination = googleMap.addMarker(new MarkerOptions().position(latLng).title("destination"));
+    }
+
+    private Point createPoint(LatLng latLng) {
+        Coordinate coordinate = new Coordinate(latLng.latitude, latLng.longitude);
+        CartesianCoordinate cartesianCoordinate= coordinateConverter.toCartesianCoordinate(coordinate);
+        Point point = new Point(building.getIdentifier(), currentFloorId,coordinate,cartesianCoordinate );
+        return point;
+    }
+
     private void setup(){
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.GONE);
         FloatingActionButton button = findViewById(R.id.start_button);
+        mNavText = (TextView) findViewById(R.id.tv_indication);
+        navigationLayout = (RelativeLayout) findViewById(R.id.navigation_layout);
 
         View.OnClickListener buttonListenerLocation = view -> {
             Log.d(IndoorNavigation.class.getSimpleName(), "button clicked");
+            navigation = true;
             if(locationManager.isRunning()){
                 progressBar.setVisibility(ProgressBar.GONE);
                 floorSelectorView.reset();
@@ -170,7 +229,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 current = location;
 
                 // Save the first floor
-                String currentFloorId = location.getFloorIdentifier();
+                currentFloorId = location.getFloorIdentifier();
                 if(!currentFloorId.equals(lastPositioningFloorId)){
                     lastPositioningFloorId = currentFloorId;
                     floorSelectorView.updatePositioningFloor(currentFloorId);
@@ -180,6 +239,16 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 displayPositioning(location);
 
                 progressBar.setVisibility(ProgressBar.GONE);
+                getRoute();
+                if(to != null){
+                    //if we are currently navigating,
+                    if(navigation) {
+                        //Informs NavigationManager object the change of the user's location
+                        SitumSdk.navigationManager().updateWithLocation(current);
+                    }
+
+                    navigationLayout.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -236,6 +305,109 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
             positionAnimator.animate(marker, groundOverlay, location);
             centerInUser(location);
         }
+    }
+
+    void getRoute(){
+        DirectionsRequest directionsRequest = new DirectionsRequest.Builder()
+                .from(current.getPosition(), null)
+                .to(to)
+                .build();
+
+
+        SitumSdk.directionsManager().requestDirections(directionsRequest, new Handler<Route>() {
+            @Override
+            public void onSuccess(Route route) {
+                removePolylines();
+                drawRoute(route);
+                //centerCamera(route);
+
+                navigationRequest = new NavigationRequest.Builder()
+                        .route(route)
+                        .distanceToGoalThreshold(3d)
+                        .outsideRouteThreshold(50d)
+                        .build();
+
+                startNavigation();
+
+
+            }
+            @Override
+            public void onFailure(Error error) {
+
+            }
+        });
+    }
+
+    private void drawRoute(Route route) {
+        for (RouteSegment segment : route.getSegments()) {
+            //For each segment you must draw a polyline
+            //Add an if to filter and draw only the current selected floor
+            List<LatLng> latLngs = new ArrayList<>();
+            for (Point point : segment.getPoints()) {
+                latLngs.add(new LatLng(point.getCoordinate().getLatitude(), point.getCoordinate().getLongitude()));
+            }
+
+            PolylineOptions polyLineOptions = new PolylineOptions()
+                    .color(Color.GREEN)
+                    .width(4f)
+                    .zIndex(3)
+                    .addAll(latLngs);
+            Polyline polyline = this.map.addPolyline(polyLineOptions);
+            polylines.add(polyline);
+        }
+    }
+
+    void startNavigation(){
+        Log.d(TAG, "startNavigation: ");
+        SitumSdk.navigationManager().requestNavigationUpdates(navigationRequest, new NavigationListener() {
+            @Override
+            public void onDestinationReached() {
+                Log.d(TAG, "onDestinationReached: ");
+                mNavText.setText("Arrived");
+                removePolylines();
+            }
+
+            @Override
+            public void onProgress(NavigationProgress navigationProgress) {
+                Context context = getApplicationContext();
+                Log.d(TAG, "onProgress: " + navigationProgress.getCurrentIndication().toText(context));
+                mNavText.setText(navigationProgress.getCurrentIndication().toText(context));
+            }
+
+            @Override
+            public void onUserOutsideRoute() {
+                Log.d(TAG, "onUserOutsideRoute: ");
+                mNavText.setText("Outside of the route");
+            }
+        });
+    }
+
+    private void stopLocation(){
+        if (!locationManager.isRunning()){
+            return;
+        }
+        locationManager.removeUpdates(locationListener);
+        current = null;
+        stopNavigation();
+
+
+        //removes polylines
+        removePolylines();
+    }
+    void stopNavigation(){
+        removePolylines();
+        to = null;
+        navigationRequest = null;
+        navigationLayout.setVisibility(View.GONE);
+        navigation = false;
+        mNavText.setText("Navigation");
+    }
+
+    private void removePolylines() {
+        for (Polyline polyline : polylines) {
+            polyline.remove();
+        }
+        polylines.clear();
     }
 
     private void initializeMarker(LatLng latLng) {
@@ -305,22 +477,6 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         marker.setIcon(bitmapDescriptor);
     }
 
-    private void stopLocation(){
-        if (!locationManager.isRunning()){
-            return;
-        }
-        locationManager.removeUpdates(locationListener);
-        current = null;
-        positionAnimator.clear();
-        if (groundOverlay != null) {
-            groundOverlay.remove();
-            groundOverlay = null;
-        }
-        if(marker != null){
-            marker.remove();
-            marker = null;
-        }
-    }
 
     /**
      * Getting the permissions we need about localization.
