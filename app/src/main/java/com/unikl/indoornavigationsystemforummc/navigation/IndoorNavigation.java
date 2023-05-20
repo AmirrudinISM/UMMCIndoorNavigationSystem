@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.JointType;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -48,6 +49,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import es.situm.sdk.SitumSdk;
@@ -60,6 +62,7 @@ import es.situm.sdk.location.LocationStatus;
 import es.situm.sdk.location.util.CoordinateConverter;
 import es.situm.sdk.model.cartography.Building;
 import es.situm.sdk.model.cartography.Floor;
+import es.situm.sdk.model.cartography.Poi;
 import es.situm.sdk.model.cartography.Point;
 import es.situm.sdk.model.directions.Route;
 import es.situm.sdk.model.directions.RouteSegment;
@@ -71,7 +74,7 @@ import es.situm.sdk.navigation.NavigationListener;
 import es.situm.sdk.navigation.NavigationRequest;
 import es.situm.sdk.utils.Handler;
 
-public class IndoorNavigation extends SampleActivity implements OnMapReadyCallback {
+public class IndoorNavigation extends SampleActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private static final int ACCESS_FINE_LOCATION_REQUEST_CODE = 3096;
     private static final int LOCATION_BLUETOOTH_REQUEST_CODE = 2209;
     private static final String TAG = "AnimatePositionActivity";
@@ -110,6 +113,8 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     private List<Polyline> polylines = new ArrayList<>();
     private TextView mNavText;
     private RelativeLayout navigationLayout;
+    private GetPoisUseCase getPoisUseCase = new GetPoisUseCase();
+    private GetPoiCategoryIconUseCase getPoiCategoryIconUseCase = new GetPoiCategoryIconUseCase();
 
 
     @Override
@@ -145,6 +150,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         getBuildingCaseUse.cancel();
         SitumSdk.locationManager().removeUpdates(locationListener);
         stopLocation();
+        getPoisUseCase.cancel();
         super.onDestroy();
     }
 
@@ -162,7 +168,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 // Once we got the building and the googleMap, instance a new FloorSelector
                 floorSelectorView = findViewById(R.id.situm_floor_selector);
                 floorSelectorView.setFloorSelector(building, map);
-
+                getPois(googleMap);
                 map.setOnMapClickListener(latLng -> {
                     getPoint(map, latLng);
                     markerDestination = map.addMarker(new MarkerOptions().position(latLng).title("destination"));
@@ -177,6 +183,62 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 
         });
 
+    }
+
+    private void getPois(final GoogleMap googleMap){
+        getPoisUseCase.get(new GetPoisUseCase.Callback() {
+            @Override
+            public void onSuccess(Building building, Collection<Poi> pois) {
+                progressBar.setVisibility(View.GONE);
+                if (pois.isEmpty()){
+                    Toast.makeText(IndoorNavigation.this, "There isnt any poi in the building: " + building.getName() + ". Go to the situm dashboard and create at least one poi before execute again this example", Toast.LENGTH_LONG).show();
+                }else {
+                    for (final Poi poi : pois) {
+                        getPoiCategoryIconUseCase.getUnselectedIcon(poi, new GetPoiCategoryIconUseCase.Callback() {
+                            @Override
+                            public void onSuccess(Bitmap bitmap) {
+                                drawPoi(poi, bitmap);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.d("Error fetching poi icon", error);
+                                drawPoi(poi);
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            private void drawPoi(Poi poi, Bitmap bitmap) {
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                LatLng latLng = new LatLng(poi.getCoordinate().getLatitude(),
+                        poi.getCoordinate().getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title(poi.getName());
+                if (bitmap != null) {
+                    Bitmap docIcon = BitmapFactory.decodeResource(getResources(), R.drawable.doctor);
+                    Bitmap docIconScaled = Bitmap.createScaledBitmap(docIcon, docIcon.getWidth() / 12,docIcon.getHeight() / 12, false);
+                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(docIconScaled));
+                }
+                googleMap.addMarker(markerOptions);
+                builder.include(latLng);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
+                googleMap.setOnMarkerClickListener(IndoorNavigation.this);
+            }
+
+            private void drawPoi(Poi poi) {
+                drawPoi(poi, null);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(IndoorNavigation.this, error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void getPoint(GoogleMap googleMap, LatLng latLng) {
@@ -590,4 +652,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 
     }
 
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        to = createPoint(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude));
+        return false;
+    }
 }
