@@ -13,7 +13,7 @@
         android:layout_height="70dp"
         android:visibility="invisible"
         android:orientation="horizontal"
-        android:background="#ffffff">
+        android:background="#121212">
 
         <TextView
             android:id="@+id/tv_indication"

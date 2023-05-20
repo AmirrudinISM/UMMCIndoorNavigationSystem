@@ -12,6 +12,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.indoornavigationsystemforummc.R;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
+import com.google.android.gms.maps.model.JointType;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -40,7 +45,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 //import es.situm.gettingstarted.common.floorselector.FloorSelectorView;
 //import es.situm.gettingstarted.common.GetBuildingCaseUse;
 //import es.situm.gettingstarted.common.SampleActivity;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.situm.sdk.SitumSdk;
@@ -158,6 +165,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 
                 map.setOnMapClickListener(latLng -> {
                     getPoint(map, latLng);
+                    markerDestination = map.addMarker(new MarkerOptions().position(latLng).title("destination"));
                     Log.d("DESTINATION", to.toString());
                 });
             }
@@ -172,15 +180,13 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     }
 
     private void getPoint(GoogleMap googleMap, LatLng latLng) {
-        removePolylines();
+
         if (markerDestination != null) {
             markerDestination.remove();
         }
 
         //creates destinationPoint on the map by converting latLong value
         to = createPoint(latLng);
-
-        markerDestination = googleMap.addMarker(new MarkerOptions().position(latLng).title("destination"));
     }
 
     private Point createPoint(LatLng latLng) {
@@ -193,27 +199,31 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     private void setup(){
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.GONE);
-        FloatingActionButton button = findViewById(R.id.start_button);
+        FloatingActionButton startButton = findViewById(R.id.start_button);
         mNavText = (TextView) findViewById(R.id.tv_indication);
         navigationLayout = (RelativeLayout) findViewById(R.id.navigation_layout);
 
         View.OnClickListener buttonListenerLocation = view -> {
-            Log.d(IndoorNavigation.class.getSimpleName(), "button clicked");
-            navigation = true;
+            Log.d(IndoorNavigation.class.getSimpleName(), "startButton clicked");
+
             if(locationManager.isRunning()){
+                removePolylines();
+                navigation = false;
                 progressBar.setVisibility(ProgressBar.GONE);
                 floorSelectorView.reset();
                 lastPositioningFloorId = null;
                 stopLocation();
+                stopNavigation();
                 SitumSdk.locationManager().removeUpdates(locationListener);
             }else {
+                navigation = true;
                 markerWithOrientation = false;
                 floorSelectorView.setFocusUserMarker(true);
                 startLocation();
             }
         };
 
-        button.setOnClickListener(buttonListenerLocation);
+        startButton.setOnClickListener(buttonListenerLocation);
     }
 
     private void startLocation(){
@@ -239,10 +249,12 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 displayPositioning(location);
 
                 progressBar.setVisibility(ProgressBar.GONE);
-                getRoute();
+
                 if(to != null){
+
                     //if we are currently navigating,
                     if(navigation) {
+                        getRoute();
                         //Informs NavigationManager object the change of the user's location
                         SitumSdk.navigationManager().updateWithLocation(current);
                     }
@@ -346,10 +358,13 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
             for (Point point : segment.getPoints()) {
                 latLngs.add(new LatLng(point.getCoordinate().getLatitude(), point.getCoordinate().getLongitude()));
             }
-
+            List<PatternItem> pattern = Arrays.asList(
+                    new Dot(), new Gap(10), new Dot(), new Gap(10));
             PolylineOptions polyLineOptions = new PolylineOptions()
-                    .color(Color.GREEN)
-                    .width(4f)
+                    .color(0xd94367ff)
+                    .jointType(JointType.ROUND)
+                    .pattern(pattern)
+                    .width(24)
                     .zIndex(3)
                     .addAll(latLngs);
             Polyline polyline = this.map.addPolyline(polyLineOptions);
@@ -388,15 +403,23 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         }
         locationManager.removeUpdates(locationListener);
         current = null;
-        stopNavigation();
 
+        positionAnimator.clear();
 
+        if (groundOverlay != null) {
+            groundOverlay.remove();
+            groundOverlay = null;
+        }
+        if(marker != null){
+            marker.remove();
+            marker = null;
+        }
         //removes polylines
         removePolylines();
     }
     void stopNavigation(){
         removePolylines();
-        to = null;
+        //to = null;
         navigationRequest = null;
         navigationLayout.setVisibility(View.GONE);
         navigation = false;
@@ -450,6 +473,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                     .target(latLng)
                     .bearing(bearing)
                     .tilt(tilt)
+                    .zoom(22)
                     .build();
 
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), UPDATE_LOCATION_ANIMATION_TIME, null);
