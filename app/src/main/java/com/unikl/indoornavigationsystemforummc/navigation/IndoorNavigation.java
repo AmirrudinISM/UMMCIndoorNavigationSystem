@@ -115,6 +115,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     private RelativeLayout navigationLayout;
     private GetPoisUseCase getPoisUseCase = new GetPoisUseCase();
     private GetPoiCategoryIconUseCase getPoiCategoryIconUseCase = new GetPoiCategoryIconUseCase();
+    Collection<Poi> pointsOfInterests;
 
 
     @Override
@@ -193,6 +194,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 if (pois.isEmpty()){
                     Toast.makeText(IndoorNavigation.this, "There isnt any poi in the building: " + building.getName() + ". Go to the situm dashboard and create at least one poi before execute again this example", Toast.LENGTH_LONG).show();
                 }else {
+                    pointsOfInterests = pois;
                     for (final Poi poi : pois) {
                         getPoiCategoryIconUseCase.getUnselectedIcon(poi, new GetPoiCategoryIconUseCase.Callback() {
                             @Override
@@ -254,7 +256,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     private Point createPoint(LatLng latLng) {
         Coordinate coordinate = new Coordinate(latLng.latitude, latLng.longitude);
         CartesianCoordinate cartesianCoordinate= coordinateConverter.toCartesianCoordinate(coordinate);
-        Point point = new Point(building.getIdentifier(), currentFloorId,coordinate,cartesianCoordinate );
+        Point point = new Point(building.getIdentifier(), floorSelectorView.getSelectedFloorId(),coordinate,cartesianCoordinate );
         return point;
     }
 
