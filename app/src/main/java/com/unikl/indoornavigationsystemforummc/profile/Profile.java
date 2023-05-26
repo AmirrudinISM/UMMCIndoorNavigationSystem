@@ -4,15 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.unikl.indoornavigationsystemforummc.utils.DBController;
+import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.main.MainMenu;
 import com.example.indoornavigationsystemforummc.R;
+import com.unikl.indoornavigationsystemforummc.utils.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Profile extends AppCompatActivity {
     TextView lblPatientID;
@@ -34,8 +38,10 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
-        DBController dbController = new DBController(Profile.this);
-        Cursor result = dbController.findPatient(preferences.getString("Email",""));
+//        DBController dbController = new DBController(Profile.this);
+//        Cursor result = dbController.findPatient(preferences.getString("Email",""));
+
+
 
         lblPatientID = (TextView) findViewById(R.id.lblPatientID);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
@@ -48,18 +54,32 @@ public class Profile extends AppCompatActivity {
         lblHeight = (TextView) findViewById(R.id.lblHeight);
         lblBloodType = (TextView) findViewById(R.id.lblBloodType);
 
-        while(result.moveToNext()){
-            lblPatientID.setText(result.getString(0));
-            lblEmail.setText(result.getString(1));
-            lblFirstName.setText(result.getString(3));
-            lblLastName.setText(result.getString(4));
-            lblNRIC.setText(result.getString(5));
-            lblEthnicity.setText(result.getString(6));
-            lblPhoneNumber.setText(result.getString(7));
-            lblAddress.setText(result.getString(8));
-            lblHeight.setText(result.getString(9));
-            lblBloodType.setText(result.getString(10));
-        }
+        DBConn conn = new DBConn(Profile.this);
+        conn.viewPatient(preferences.getString("PatientID", ""), new StringCallback() {
+            @Override
+            public void onSuccess(String response) throws JSONException {
+                JSONObject profileJSON = new JSONObject(response);
+
+                System.out.println(response);
+
+                lblPatientID.setText(profileJSON.getString("patientID"));
+                lblEmail.setText(profileJSON.getString("email"));
+                lblFirstName.setText(profileJSON.getString("firstName"));
+                lblLastName.setText(profileJSON.getString("lastName"));
+                lblNRIC.setText(profileJSON.getString("NRIC"));
+                lblEthnicity.setText(profileJSON.getString("ethnicity"));
+                lblPhoneNumber.setText(profileJSON.getString("phoneNumber"));
+                lblAddress.setText(profileJSON.getString("address"));
+                lblHeight.setText(profileJSON.getString("height"));
+                lblBloodType.setText(profileJSON.getString("bloodType"));
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(Profile.this, "This doesn't work", Toast.LENGTH_LONG).show();
+            }
+        });
+
 
         btnEditProfile = (Button) findViewById(R.id.btnEditProfile);
         btnEditProfile.setOnClickListener(new View.OnClickListener() {

@@ -147,8 +147,11 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     @Override
     public void onDestroy(){
         getBuildingCaseUse.cancel();
-        SitumSdk.locationManager().removeUpdates(locationListener);
-        stopLocation();
+        if(locationListener != null){
+            SitumSdk.locationManager().removeUpdates(locationListener);
+            stopLocation();
+        }
+
         super.onDestroy();
     }
 

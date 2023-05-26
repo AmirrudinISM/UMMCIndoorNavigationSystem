@@ -12,8 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.utils.DBController;
 import com.example.indoornavigationsystemforummc.R;
+import com.unikl.indoornavigationsystemforummc.utils.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class EditProfile extends AppCompatActivity {
 
@@ -37,18 +42,26 @@ public class EditProfile extends AppCompatActivity {
         txtAddress = (EditText) findViewById(R.id.txtAddress);
         txtHeight = (EditText) findViewById(R.id.txtHeight);
 
-        Cursor result = db.findPatient(preferences.getString("Email",""));
-        while(result.moveToNext()){
-            txtPhoneNumber.setText(result.getString(7));
-            txtAddress.setText(result.getString(8));
-            txtHeight.setText(result.getString(9));
-        }
+        DBConn dbConn = new DBConn(EditProfile.this);
+        dbConn.viewPatient(preferences.getString("PatientID", ""), new StringCallback() {
+            @Override
+            public void onSuccess(String response) throws JSONException {
+                JSONObject profileJSON = new JSONObject(response);
+                txtPhoneNumber.setText(profileJSON.getString("phoneNumber"));
+                txtAddress.setText(profileJSON.getString("address"));
+                txtHeight.setText(profileJSON.getString("height"));
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
 
         btnSaveChanges = (Button) findViewById(R.id.btnEditProfile);
         btnSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 String patientID = preferences.getString("PatientID","");
                 String phoneNumber = txtPhoneNumber.getText().toString();
@@ -64,20 +77,21 @@ public class EditProfile extends AppCompatActivity {
                         Toast.makeText(EditProfile.this, "Please enter value between 20cm to 300cm", Toast.LENGTH_LONG).show();
                     }
                     else{
-                        if(db.updatePatient(patientID,phoneNumber,address,height)){
-                            Toast.makeText(EditProfile.this, "Update Successful!", Toast.LENGTH_LONG).show();
+                        dbConn.updateProfile(patientID, phoneNumber, address, height, new StringCallback() {
+                            @Override
+                            public void onSuccess(String response) throws JSONException {
+                                Toast.makeText(EditProfile.this, "Update Successful!", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(EditProfile.this, Profile.class);
+                                startActivity(intent);
+                            }
 
-                            Intent intent = new Intent(EditProfile.this, Profile.class);
-                            startActivity(intent);
-                        }
-                        else{
-                            Toast.makeText(EditProfile.this, "Update Failed!", Toast.LENGTH_LONG).show();
-                        }
+                            @Override
+                            public void onFailure() {
+                                Toast.makeText(EditProfile.this, "Update Failed!", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 }
-
-
-
             }
         });
 

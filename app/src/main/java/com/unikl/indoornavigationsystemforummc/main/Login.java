@@ -65,9 +65,8 @@ public class Login extends AppCompatActivity {
                                 inPatient.setEmail(result.getString("email"));
                                 inPatient.setPassword(result.getString("password"));
                                 inPatient.setFirstName(result.getString("firstName"));
-                                Toast.makeText(Login.this, "Patient ID: " + inPatient.getPatientID(), Toast.LENGTH_LONG).show();
 
-                                if(inPatient.getPatientID() == null){
+                                if(inPatient.getPatientID().equals("")){
                                     Toast.makeText(Login.this, "User with this email doesn't exist! ", Toast.LENGTH_LONG).show();
                                 }else{
 

@@ -27,13 +27,13 @@ import java.util.Map;
 
 public class DBConn {
     private Context context;
-
+    private final String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
     public DBConn(Context context){
         this.context = context;
     }
     public boolean registerPatient(Patient inPatient){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -108,7 +108,6 @@ public class DBConn {
 
     public void createAppointment(Appointment inAppointment){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -156,8 +155,6 @@ public class DBConn {
 
     public void getAppointments(String patientID , StringCallback callback){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 url,
@@ -190,7 +187,6 @@ public class DBConn {
 
     public void viewAppointment(String appointmentID, StringCallback callback){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
@@ -224,8 +220,6 @@ public class DBConn {
 
     public void cancelAppointment(String appointmentID, StringCallback callback){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 url,
@@ -250,6 +244,75 @@ public class DBConn {
                 Map<String, String> params = new HashMap<>();
                 params.put("action", "cancelAppointment");
                 params.put("appointmentID", appointmentID);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    public void viewPatient(String patientID, StringCallback callback){
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            callback.onSuccess(response);
+                        } catch (JSONException e) {
+                            Log.d("ERROR", e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Log.d("Error", error.getMessage());
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("action", "viewProfile");
+                params.put("patientID", patientID);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    public void updateProfile(String patientID, String phoneNumber, String address, float height, StringCallback callback){
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            callback.onSuccess(response);
+                        } catch (JSONException e) {
+                            Log.d("ERROR", e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Log.d("Error", error.getMessage());
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("action", "updateProfile");
+                params.put("patientID", patientID);
+                params.put("phoneNumber", phoneNumber);
+                params.put("address", address);
+                params.put("height", String.valueOf(height));
                 return params;
             }
         };
