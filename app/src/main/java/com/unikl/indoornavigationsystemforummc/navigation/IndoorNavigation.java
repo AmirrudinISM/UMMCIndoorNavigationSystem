@@ -113,9 +113,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     private List<Polyline> polylines = new ArrayList<>();
     private TextView mNavText;
     private RelativeLayout navigationLayout;
-    private GetPoisUseCase getPoisUseCase = new GetPoisUseCase();
-    private GetPoiCategoryIconUseCase getPoiCategoryIconUseCase = new GetPoiCategoryIconUseCase();
-    Collection<Poi> pointsOfInterests;
+
 
 
     @Override
@@ -151,7 +149,6 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         getBuildingCaseUse.cancel();
         SitumSdk.locationManager().removeUpdates(locationListener);
         stopLocation();
-        getPoisUseCase.cancel();
         super.onDestroy();
     }
 
