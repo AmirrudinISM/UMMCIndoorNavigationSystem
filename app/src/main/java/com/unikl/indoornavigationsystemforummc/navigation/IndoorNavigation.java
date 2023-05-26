@@ -169,9 +169,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 // Once we got the building and the googleMap, instance a new FloorSelector
                 floorSelectorView = findViewById(R.id.situm_floor_selector);
                 floorSelectorView.setFloorSelector(building, map);
-                getPois(googleMap);
+
                 map.setOnMapClickListener(latLng -> {
-                    getPoint(map, latLng);
+                    getPoint(latLng);
                     markerDestination = map.addMarker(new MarkerOptions().position(latLng).title("destination"));
                     Log.d("DESTINATION", to.toString());
                 });
@@ -186,64 +186,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
 
     }
 
-    private void getPois(final GoogleMap googleMap){
-        getPoisUseCase.get(new GetPoisUseCase.Callback() {
-            @Override
-            public void onSuccess(Building building, Collection<Poi> pois) {
-                progressBar.setVisibility(View.GONE);
-                if (pois.isEmpty()){
-                    Toast.makeText(IndoorNavigation.this, "There isnt any poi in the building: " + building.getName() + ". Go to the situm dashboard and create at least one poi before execute again this example", Toast.LENGTH_LONG).show();
-                }else {
-                    pointsOfInterests = pois;
-                    for (final Poi poi : pois) {
-                        getPoiCategoryIconUseCase.getUnselectedIcon(poi, new GetPoiCategoryIconUseCase.Callback() {
-                            @Override
-                            public void onSuccess(Bitmap bitmap) {
-                                drawPoi(poi, bitmap);
-                            }
 
-                            @Override
-                            public void onError(String error) {
-                                Log.d("Error fetching poi icon", error);
-                                drawPoi(poi);
-                            }
-                        });
-                    }
 
-                }
-            }
-
-            private void drawPoi(Poi poi, Bitmap bitmap) {
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                LatLng latLng = new LatLng(poi.getCoordinate().getLatitude(),
-                        poi.getCoordinate().getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions()
-                        .position(latLng)
-                        .title(poi.getName());
-                if (bitmap != null) {
-                    Bitmap docIcon = BitmapFactory.decodeResource(getResources(), R.drawable.doctor);
-                    Bitmap docIconScaled = Bitmap.createScaledBitmap(docIcon, docIcon.getWidth() / 12,docIcon.getHeight() / 12, false);
-                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(docIconScaled));
-                }
-                googleMap.addMarker(markerOptions);
-                builder.include(latLng);
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
-                googleMap.setOnMarkerClickListener(IndoorNavigation.this);
-            }
-
-            private void drawPoi(Poi poi) {
-                drawPoi(poi, null);
-            }
-
-            @Override
-            public void onError(String error) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(IndoorNavigation.this, error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void getPoint(GoogleMap googleMap, LatLng latLng) {
+    private void getPoint(LatLng latLng) {
 
         if (markerDestination != null) {
             markerDestination.remove();
@@ -420,7 +365,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
             //Add an if to filter and draw only the current selected floor
             List<LatLng> latLngs = new ArrayList<>();
             for (Point point : segment.getPoints()) {
-                latLngs.add(new LatLng(point.getCoordinate().getLatitude(), point.getCoordinate().getLongitude()));
+                if(point.getFloorIdentifier().equals(floorSelectorView.getSelectedFloorId())) {
+                    latLngs.add(new LatLng(point.getCoordinate().getLatitude(), point.getCoordinate().getLongitude()));
+                }
             }
             List<PatternItem> pattern = Arrays.asList(
                     new Dot(), new Gap(10), new Dot(), new Gap(10));
