@@ -37,12 +37,15 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="152dp"
-        android:layout_height="176dp"
+        android:layout_width="312dp"
+        android:layout_height="238dp"
+        android:layout_above="@+id/progressBar"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/abc"
-        android:contentDescription="logo for UM" />
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="36dp"
+        android:contentDescription="logo for UM"
+        android:src="@drawable/logoppum_outline" />
 
     <EditText
         android:id="@+id/emailInput"
@@ -89,15 +92,18 @@
 
 
     <TextView
-        android:id = "@+id/lblRegister"
-        android:layout_width = "wrap_content"
-        android:layout_height = "wrap_content"
-        android:text = "Register"
-        android:layout_margin="14dp"
-        android:layout_below = "@+id/btnLogin"
-        android:layout_centerHorizontal = "true"
-        android:textColor = "#0388fc"
-        android:textSize = "18sp" />
+        android:id="@+id/lblRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="14dp"
+        android:text="Register"
+        android:textColor="#1976D2"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/lblReturnToHome"
@@ -109,7 +115,7 @@
         android:layout_centerHorizontal="true"
         android:text="Return to Main Menu"
         android:textAlignment="center"
-        android:textColor="#0388fc"
+        android:textColor="#1976D2"
         android:textSize="18sp" />
 
 
