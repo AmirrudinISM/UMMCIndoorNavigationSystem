@@ -139,7 +139,7 @@ public class ViewAppointment extends AppCompatActivity {
                     tvAdditionalNotes.setText("Additional Notes: " + appointmentJSON.getString("additionalNotes"));
                 }
 
-                if(appointmentStatusString.equals("CANCELLED")){
+                if(appointmentStatusString.equals("CANCELLED") || appointmentStatusString.equals("MISSED") || appointmentStatusString.equals("COMPLETED")){
                     btnCancelAppointment.setVisibility(View.GONE);
                 }
             }
