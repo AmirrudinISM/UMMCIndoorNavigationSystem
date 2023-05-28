@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.indoornavigationsystemforummc.R;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
+
+import java.util.ArrayList;
 
 public class Register extends AppCompatActivity {
     private EditText txtNRIC;
@@ -24,9 +27,22 @@ public class Register extends AppCompatActivity {
     private EditText txtLastName;
     private Spinner spnrEthnicity;
     private Spinner spnrBloodType;
+    private CheckBox chckStroke,
+            chckDepression,
+            chckDiabetes1,
+            chckDiabetes2,
+            chckArthritis,
+            chckOsteoporosis,
+            chckAsthma,
+            chckPulmonaryDisease,
+            chckKidneyDisease,
+            chckHeartDisease;
+
 
     private Button btnRegister;
     private TextView lblCancel;
+    ArrayList<String> chronicIllnesses;
+    String allChronicIllnesses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +70,152 @@ public class Register extends AppCompatActivity {
         // Apply the adapter to the spinner
         spnrBloodType.setAdapter(adapterBld);
 
+        chckStroke = findViewById(R.id.chckStroke);
+        chckDepression = findViewById(R.id.chckDepression);
+        chckDiabetes1 = findViewById(R.id.chckDiabetes1);
+        chckDiabetes2 = findViewById(R.id.chckDiabetes2);
+        chckArthritis = findViewById(R.id.chckArthritis);
+        chckOsteoporosis = findViewById(R.id.chckOsteoporosis);
+        chckAsthma = findViewById(R.id.chckAsthma);
+        chckPulmonaryDisease = findViewById(R.id.chckPulmonaryDisease);
+        chckKidneyDisease = findViewById(R.id.chckKidneyDisease);
+        chckHeartDisease = findViewById(R.id.chckHeartDisease);
+
         btnRegister = (Button) findViewById(R.id.btnRegister);
         lblCancel = (TextView) findViewById(R.id.lblCancel);
+
+        //all checkboxes
+        chronicIllnesses = new ArrayList<>();
+        chckStroke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckStroke.isChecked()){
+                    chronicIllnesses.add("Stroke");
+                }
+                else{
+                    chronicIllnesses.remove("Stroke");
+                }
+            }
+        });
+
+        chckDepression.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckDepression.isChecked()){
+                    chronicIllnesses.add("Depression");
+                }
+                else{
+                    chronicIllnesses.remove("Depression");
+                }
+            }
+        });
+
+        chckDiabetes1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckDiabetes1.isChecked()){
+                    chronicIllnesses.add("Diabetes 1");
+                }
+                else{
+                    chronicIllnesses.remove("Diabetes 1");
+                }
+            }
+        });
+
+        chckDiabetes2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckDiabetes2.isChecked()){
+                    chronicIllnesses.add("Diabetes 2");
+                }
+                else{
+                    chronicIllnesses.remove("Diabetes 2");
+                }
+            }
+        });
+
+        chckArthritis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckArthritis.isChecked()){
+                    chronicIllnesses.add("Arthritis");
+                }
+                else{
+                    chronicIllnesses.remove("Arthritis");
+                }
+            }
+        });
+
+        chckOsteoporosis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckOsteoporosis.isChecked()){
+                    chronicIllnesses.add("Osteoporosis");
+                }
+                else{
+                    chronicIllnesses.remove("Osteoporosis");
+                }
+            }
+        });
+
+        chckAsthma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckAsthma.isChecked()){
+                    chronicIllnesses.add("Asthma");
+                }
+                else{
+                    chronicIllnesses.remove("Asthma");
+                }
+            }
+        });
+
+        chckPulmonaryDisease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckPulmonaryDisease.isChecked()){
+                    chronicIllnesses.add("Chronic obstructive pulmonary disease (COPD)");
+                }
+                else{
+                    chronicIllnesses.remove("Chronic obstructive pulmonary disease (COPD)");
+                }
+            }
+        });
+
+        chckKidneyDisease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckKidneyDisease.isChecked()){
+                    chronicIllnesses.add("Chronic Kidney Disease");
+                }
+                else{
+                    chronicIllnesses.remove("Chronic Kidney Disease");
+                }
+            }
+        });
+
+        chckHeartDisease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chckHeartDisease.isChecked()){
+                    chronicIllnesses.add("Heart disease");
+                }
+                else{
+                    chronicIllnesses.remove("Heart disease");
+                }
+            }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //account info
+                if(chronicIllnesses.isEmpty()){
+                    allChronicIllnesses = "";
+                }
+                else{
+                    allChronicIllnesses = concatenateChronicIllnessesString();
+                }
 
                 String nric = txtNRIC.getText().toString();
                 String email = txtEmail.getText().toString();
@@ -81,7 +236,7 @@ public class Register extends AppCompatActivity {
                     if (password.contentEquals(reconfirm)){
                         DBConn dbConn = new DBConn(Register.this);
                         //if email is still available
-                        Patient inPatient = new Patient(nric,email,password, firstName, lastName, ethnicity, bloodType);
+                        Patient inPatient = new Patient(nric,email,password, firstName, lastName, ethnicity, bloodType, allChronicIllnesses);
                         if (dbConn.registerPatient(inPatient)){
 
                             Intent intent = new Intent(Register.this, Login.class);
@@ -110,5 +265,19 @@ public class Register extends AppCompatActivity {
 
 
 
+    }
+
+    private String concatenateChronicIllnessesString() {
+        String res = "";
+        for (int i = 0; i < chronicIllnesses.size(); i++){
+            if(i == (chronicIllnesses.size() - 1)){
+                res += chronicIllnesses.get(i);
+            }
+            else{
+                res += chronicIllnesses.get(i) + ", ";
+            }
+
+        }
+        return res;
     }
 }

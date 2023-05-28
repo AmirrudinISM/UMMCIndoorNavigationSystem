@@ -63,6 +63,7 @@ public class DBConn {
                 params.put("address", "");
                 params.put("height", String.valueOf(inPatient.getHeight()));
                 params.put("bloodType", inPatient.getBloodType());
+                params.put("chronicIllnesses", inPatient.getChronicIllnesses());
                 return params;
             }
         };
