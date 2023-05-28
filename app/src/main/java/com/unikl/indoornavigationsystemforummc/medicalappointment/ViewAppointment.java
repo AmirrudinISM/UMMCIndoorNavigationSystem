@@ -26,6 +26,7 @@ public class ViewAppointment extends AppCompatActivity {
             tvStatus,
             tvAppointmentDateAndTime,
             tvDoctorID,
+            tvDoctorName,
             tvCommonSymptoms,
             tvOtherSymptoms,
             tvWeight,
@@ -48,6 +49,7 @@ public class ViewAppointment extends AppCompatActivity {
 
         btnCancelAppointment= findViewById(R.id.btnCancelAppointment);
         tvAppointmentID = findViewById(R.id.tvAppointmentID);
+        tvDoctorName = findViewById(R.id.tvDoctorName);
         tvStatus = findViewById(R.id.tvAppointmentStatus);
         tvAppointmentDateAndTime = (TextView) findViewById(R.id.tvAppointmentDateAndTime);
         tvDoctorID = (TextView)findViewById(R.id.tvDoctorID);
@@ -77,7 +79,6 @@ public class ViewAppointment extends AppCompatActivity {
                 appointmentIDString = appointmentJSON.getString("appointmentID");
                 tvAppointmentID.setText("Appointment ID: " + appointmentIDString);
 
-
                 appointmentStatusString = appointmentJSON.getString("appointmentStatus");
                 tvStatus.setText("Status: " + appointmentStatusString);
 
@@ -93,6 +94,13 @@ public class ViewAppointment extends AppCompatActivity {
                 }
                 else {
                     tvDoctorID.setText("Doctor ID: " + appointmentJSON.getString("doctorID"));
+                }
+
+                if(appointmentJSON.getString("fullName").isEmpty()){
+                    tvDoctorName.setText("Full Name: ");
+                }
+                else {
+                    tvDoctorName.setText("Full Name: " + appointmentJSON.getString("fullName"));
                 }
 
                 System.out.println("Symptoms: " + appointmentJSON.getString("symptoms"));
