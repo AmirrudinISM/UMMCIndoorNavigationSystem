@@ -21,8 +21,9 @@ public class Patient {
     private String address;
     private float height;
     private String bloodType;
+    private String chronicIllnesses;
 
-    public Patient(String NRIC, String email, String password, String firstName, String lastName, String ethnicity, String phoneNumber, String address, float height, String bloodType) {
+    public Patient(String NRIC, String email, String password, String firstName, String lastName, String ethnicity, String phoneNumber, String address, float height, String bloodType, String chronicIllnesses) {
         this.NRIC = NRIC;
         this.email = email;
         this.password = password;
@@ -33,13 +34,14 @@ public class Patient {
         this.address = address;
         this.height = height;
         this.bloodType = bloodType;
+        this.chronicIllnesses = chronicIllnesses;
     }
 
     public Patient() {
 
     }
 
-    public Patient(String nric, String email, String password, String firstName, String lastName, String ethnicity, String bloodType) {
+    public Patient(String nric, String email, String password, String firstName, String lastName, String ethnicity, String bloodType, String chronicIllnesses) {
         this.NRIC = nric;
         this.email = email;
         this.password = password;
@@ -47,7 +49,9 @@ public class Patient {
         this.lastName = lastName;
         this.ethnicity = ethnicity;
         this.bloodType = bloodType;
+        this.chronicIllnesses = chronicIllnesses;
     }
+
 
     public String getPatientID() {
         return patientID;
@@ -137,5 +141,11 @@ public class Patient {
         this.bloodType = bloodType;
     }
 
-    
+    public String getChronicIllnesses() {
+        return chronicIllnesses;
+    }
+
+    public void setChronicIllnesses(String chronicIllnesses) {
+        this.chronicIllnesses = chronicIllnesses;
+    }
 }

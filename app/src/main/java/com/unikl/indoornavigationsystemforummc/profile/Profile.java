@@ -29,6 +29,7 @@ public class Profile extends AppCompatActivity {
     TextView lblAddress;
     TextView lblHeight;
     TextView lblBloodType;
+    TextView lblChronicIllnesses;
     Button btnEditProfile;
     TextView lblMainMenu;
 
@@ -53,6 +54,7 @@ public class Profile extends AppCompatActivity {
         lblAddress = (TextView) findViewById(R.id.lblAddress);
         lblHeight = (TextView) findViewById(R.id.lblHeight);
         lblBloodType = (TextView) findViewById(R.id.lblBloodType);
+        lblChronicIllnesses = findViewById(R.id.lblChronicIllnesses);
 
         DBConn conn = new DBConn(Profile.this);
         conn.viewPatient(preferences.getString("PatientID", ""), new StringCallback() {
@@ -72,6 +74,7 @@ public class Profile extends AppCompatActivity {
                 lblAddress.setText(profileJSON.getString("address"));
                 lblHeight.setText(profileJSON.getString("height"));
                 lblBloodType.setText(profileJSON.getString("bloodType"));
+                lblChronicIllnesses.setText(profileJSON.getString("chronicIllnesses"));
             }
 
             @Override
