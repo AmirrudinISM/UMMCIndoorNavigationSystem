@@ -17,7 +17,8 @@
             <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/drProgressBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:indeterminate="true"/>
 
             <TextView
                 android:layout_width="match_parent"

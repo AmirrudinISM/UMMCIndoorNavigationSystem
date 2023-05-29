@@ -31,7 +31,7 @@ public class DBConn {
     public DBConn(Context context){
         this.context = context;
     }
-    public boolean registerPatient(Patient inPatient){
+    public boolean registerPatient(Patient inPatient, StringCallback callback){
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -39,12 +39,18 @@ public class DBConn {
                     @Override
                     public void onResponse(String response) {
                         // Handle response
+                        try {
+                            callback.onSuccess(response);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                         Toast.makeText(context, "Data sent successfully!", Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // Handle error
+                callback.onFailure();
                 Toast.makeText(context, "Failed to send data: " + error.getMessage(), Toast.LENGTH_LONG).show();
 
             }

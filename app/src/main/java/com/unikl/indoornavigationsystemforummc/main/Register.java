@@ -14,7 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.indoornavigationsystemforummc.R;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
+import com.unikl.indoornavigationsystemforummc.utils.StringCallback;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -43,6 +47,7 @@ public class Register extends AppCompatActivity {
     private TextView lblCancel;
     ArrayList<String> chronicIllnesses;
     String allChronicIllnesses;
+    LinearProgressIndicator progBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,9 @@ public class Register extends AppCompatActivity {
 
         //all checkboxes
         chronicIllnesses = new ArrayList<>();
+
+        progBar = findViewById(R.id.regProgBar);
+        progBar.setVisibility(View.GONE);
         chckStroke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,6 +217,7 @@ public class Register extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progBar.setVisibility(View.VISIBLE);
                 //account info
                 if(chronicIllnesses.isEmpty()){
                     allChronicIllnesses = "";
@@ -230,6 +239,7 @@ public class Register extends AppCompatActivity {
                 //fields are empty
                 if(nric.isEmpty() || email.isEmpty() || password.isEmpty() || reconfirm.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || spnrEthnicity.getSelectedItemPosition() == 0 || spnrBloodType.getSelectedItemPosition() == 0){
                     Toast.makeText(getApplicationContext(), "Please provide all required information",Toast.LENGTH_SHORT).show();
+                    progBar.setVisibility(View.GONE);
                 }
                 else{
                     //passwords are equal
@@ -237,16 +247,29 @@ public class Register extends AppCompatActivity {
                         DBConn dbConn = new DBConn(Register.this);
                         //if email is still available
                         Patient inPatient = new Patient(nric,email,password, firstName, lastName, ethnicity, bloodType, allChronicIllnesses);
-                        if (dbConn.registerPatient(inPatient)){
+                        if (dbConn.registerPatient(inPatient, new StringCallback() {
+                            @Override
+                            public void onSuccess(String response) throws JSONException {
+                                progBar.setVisibility(View.GONE);
+                                Intent intent = new Intent(Register.this, Login.class);
+                                startActivity(intent);
+                            }
 
-                            Intent intent = new Intent(Register.this, Login.class);
-                            startActivity(intent);
+                            @Override
+                            public void onFailure() {
+                                progBar.setVisibility(View.GONE);
+                            }
+                        })){
+
+
                         }
                         else{
+                            progBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Email taken",Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{
+                        progBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(), "Password mismatch",Toast.LENGTH_SHORT).show();
                     }
                 }

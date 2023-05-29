@@ -7,9 +7,18 @@
     android:layout_height="match_parent"
     tools:context="com.unikl.indoornavigationsystemforummc.main.Register">
 
-    <ScrollView
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/regProgBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -153,8 +162,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spnrBloodType"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/spnrBloodType" />
 
             <CheckBox
                 android:id="@+id/chckStroke"
@@ -166,6 +174,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblChronicIllnesses" />
+
             <CheckBox
                 android:id="@+id/chckDepression"
                 android:layout_width="match_parent"
@@ -176,6 +185,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckStroke" />
+
             <CheckBox
                 android:id="@+id/chckDiabetes1"
                 android:layout_width="match_parent"
@@ -186,6 +196,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckDepression" />
+
             <CheckBox
                 android:id="@+id/chckDiabetes2"
                 android:layout_width="match_parent"
@@ -196,6 +207,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckDiabetes1" />
+
             <CheckBox
                 android:id="@+id/chckArthritis"
                 android:layout_width="match_parent"
@@ -206,6 +218,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckDiabetes2" />
+
             <CheckBox
                 android:id="@+id/chckOsteoporosis"
                 android:layout_width="match_parent"
@@ -216,6 +229,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckArthritis" />
+
             <CheckBox
                 android:id="@+id/chckAsthma"
                 android:layout_width="match_parent"
@@ -226,6 +240,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckOsteoporosis" />
+
             <CheckBox
                 android:id="@+id/chckPulmonaryDisease"
                 android:layout_width="match_parent"
@@ -236,6 +251,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chckAsthma" />
+
             <CheckBox
                 android:id="@+id/chckKidneyDisease"
                 android:layout_width="match_parent"
