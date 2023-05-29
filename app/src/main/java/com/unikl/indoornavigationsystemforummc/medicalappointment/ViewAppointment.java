@@ -96,6 +96,19 @@ public class ViewAppointment extends AppCompatActivity {
                     tvDoctorID.setText("Doctor ID: " + appointmentJSON.getString("doctorID"));
                 }
 
+                tvDoctorID.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(ViewAppointment.this, ViewDoctorProfile.class);
+                        try {
+                            intent.putExtra("doctorID",appointmentJSON.getString("doctorID"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        startActivity(intent);
+                    }
+                });
+
                 if(appointmentJSON.getString("fullName").isEmpty()){
                     tvDoctorName.setText("Full Name: ");
                 }
