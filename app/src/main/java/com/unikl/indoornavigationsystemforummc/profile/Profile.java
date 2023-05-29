@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.main.MainMenu;
 import com.example.indoornavigationsystemforummc.R;
@@ -32,6 +33,7 @@ public class Profile extends AppCompatActivity {
     TextView lblChronicIllnesses;
     Button btnEditProfile;
     TextView lblMainMenu;
+    LinearProgressIndicator profileProgBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +57,14 @@ public class Profile extends AppCompatActivity {
         lblHeight = (TextView) findViewById(R.id.lblHeight);
         lblBloodType = (TextView) findViewById(R.id.lblBloodType);
         lblChronicIllnesses = findViewById(R.id.lblChronicIllnesses);
+        profileProgBar = findViewById(R.id.profileProgBar);
+        profileProgBar.setVisibility(View.VISIBLE);
 
         DBConn conn = new DBConn(Profile.this);
         conn.viewPatient(preferences.getString("PatientID", ""), new StringCallback() {
             @Override
             public void onSuccess(String response) throws JSONException {
+                profileProgBar.setVisibility(View.GONE);
                 JSONObject profileJSON = new JSONObject(response);
 
                 System.out.println(response);
@@ -80,6 +85,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onFailure() {
                 Toast.makeText(Profile.this, "This doesn't work", Toast.LENGTH_LONG).show();
+                profileProgBar.setVisibility(View.GONE);
             }
         });
 
