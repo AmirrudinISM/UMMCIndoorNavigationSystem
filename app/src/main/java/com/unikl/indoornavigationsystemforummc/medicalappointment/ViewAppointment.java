@@ -35,12 +35,14 @@ public class ViewAppointment extends AppCompatActivity {
             tvTemperature,
             tvOxygenLevel,
             tvDiagnosis,
-            tvAdditionalNotes;
+            tvAdditionalNotes,
+            tvPrescription;
     private Button btnCancelAppointment;
     private TextView tvBack;
     private String appointmentDateString;
     private String appointmentIDString;
     private String appointmentStatusString;
+    private String prescriptionString;
     private LinearProgressIndicator progBar;
 
     @Override
@@ -63,6 +65,7 @@ public class ViewAppointment extends AppCompatActivity {
         tvOxygenLevel = (TextView) findViewById(R.id.tvOxygenLevel);
         tvDiagnosis = (TextView) findViewById(R.id.tvDiagnosis);
         tvAdditionalNotes = (TextView) findViewById(R.id.tvAdditionalNotes);
+        tvPrescription = findViewById(R.id.tvPrescription);
 
         progBar = findViewById(R.id.appointmentProgBar);
         progBar.setVisibility(View.VISIBLE);
@@ -99,20 +102,21 @@ public class ViewAppointment extends AppCompatActivity {
                 }
                 else {
                     tvDoctorID.setText("Doctor ID: " + appointmentJSON.getString("doctorID"));
+                    tvDoctorID.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(ViewAppointment.this, ViewDoctorProfile.class);
+                            try {
+                                intent.putExtra("doctorID",appointmentJSON.getString("doctorID"));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            startActivity(intent);
+                        }
+                    });
                 }
 
-                tvDoctorID.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(ViewAppointment.this, ViewDoctorProfile.class);
-                        try {
-                            intent.putExtra("doctorID",appointmentJSON.getString("doctorID"));
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                        startActivity(intent);
-                    }
-                });
+
 
                 if(appointmentJSON.getString("fullName").isEmpty()){
                     tvDoctorName.setText("Full Name: ");
@@ -163,6 +167,13 @@ public class ViewAppointment extends AppCompatActivity {
                 }
                 else{
                     tvAdditionalNotes.setText("Additional Notes: " + appointmentJSON.getString("additionalNotes"));
+                }
+
+                if(appointmentJSON.getString("prescription").isEmpty()){
+                    tvPrescription.setText("Prescription: ");
+                }
+                else{
+                    tvPrescription.setText("Prescription: " + appointmentJSON.getString("prescription"));
                 }
 
                 if(appointmentStatusString.equals("CANCELLED") || appointmentStatusString.equals("MISSED") || appointmentStatusString.equals("COMPLETED")){
