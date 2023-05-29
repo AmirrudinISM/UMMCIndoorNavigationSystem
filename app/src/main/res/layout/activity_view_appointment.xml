@@ -48,10 +48,6 @@
             </LinearLayout>
 
 
-
-
-
-
             <TextView
                 android:id="@+id/tvAppointmentDateAndTime"
                 android:layout_width="match_parent"
@@ -62,6 +58,7 @@
                 android:id="@+id/tvDoctorID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#1976D2"
                 android:text="Doctor ID:"
                 android:textSize="18sp"/>
             <TextView

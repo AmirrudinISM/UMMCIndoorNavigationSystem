@@ -319,4 +319,37 @@ public class DBConn {
         };
         queue.add(stringRequest);
     }
+
+    public void viewDoctor(String doctorID, StringCallback callback){
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            callback.onSuccess(response);
+                        } catch (JSONException e) {
+                            Log.d("ERROR", e.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Log.d("Error", error.getMessage());
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("action", "viewDoctor");
+                params.put("doctorID", doctorID);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
 }
