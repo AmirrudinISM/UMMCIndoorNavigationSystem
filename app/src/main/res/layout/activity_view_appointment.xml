@@ -52,6 +52,11 @@
 
             </LinearLayout>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
 
             <TextView
                 android:id="@+id/tvAppointmentDateAndTime"
@@ -59,6 +64,10 @@
                 android:layout_height="wrap_content"
                 android:text="Appointment Date &amp; Time:"
                 android:textSize="18sp"/>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
             <TextView
                 android:id="@+id/tvDoctorID"
                 android:layout_width="match_parent"
@@ -72,7 +81,10 @@
                 android:layout_height="wrap_content"
                 android:text="Doctor Name:"
                 android:textSize="18sp"/>
-
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
 
             <TextView
@@ -98,7 +110,10 @@
                 android:text="---Common Symptoms:----"
                 android:layout_marginVertical="6sp"
                 android:textSize="18sp"/>
-
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +129,10 @@
                 android:text="--Other Symptoms: --"
                 android:layout_marginVertical="6sp"
                 android:textSize="18sp"/>
-
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
             <TextView
                 android:layout_marginVertical="20dp"
                 android:layout_width="match_parent"
@@ -131,10 +149,17 @@
                 android:textSize="18sp"/>
 
             <TextView
-                android:id="@+id/tvBloodPressure"
+                android:id="@+id/tvSystolic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Blood Pressure Systolic (mmHg): "
+                android:text="Blood Pressure, Systolic (mmHg): "
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tvDiastolic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Blood Pressure, Diastolic (mmHg): "
                 android:textSize="18sp"/>
 
             <TextView
@@ -151,6 +176,11 @@
                 android:text="Oxygen Level (%): "
                 android:textSize="18sp"/>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <TextView
                 android:id="@+id/tvDiagnosis"
                 android:layout_marginVertical="20dp"
@@ -159,6 +189,11 @@
                 android:text="Diagnosis:"
                 android:textSize="20sp"/>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <TextView
                 android:id="@+id/tvAdditionalNotes"
                 android:layout_marginVertical="20dp"
@@ -166,6 +201,10 @@
                 android:layout_height="wrap_content"
                 android:text="Additional Notes:"
                 android:textSize="20sp"/>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
             <TextView
                 android:id="@+id/tvPrescription"
@@ -174,7 +213,10 @@
                 android:layout_height="wrap_content"
                 android:text="Prescription:"
                 android:textSize="20sp"/>
-
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
 
             <Button

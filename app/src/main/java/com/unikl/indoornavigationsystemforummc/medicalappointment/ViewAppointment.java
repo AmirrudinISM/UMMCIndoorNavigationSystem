@@ -31,7 +31,8 @@ public class ViewAppointment extends AppCompatActivity {
             tvCommonSymptoms,
             tvOtherSymptoms,
             tvWeight,
-            tvBloodPressure,
+            tvsystolicBP,
+            tvDiastolicBP,
             tvTemperature,
             tvOxygenLevel,
             tvDiagnosis,
@@ -60,7 +61,8 @@ public class ViewAppointment extends AppCompatActivity {
         tvCommonSymptoms = (TextView) findViewById(R.id.tvCommonSymptoms);
         tvOtherSymptoms = (TextView) findViewById(R.id.tvOtherSymptoms);
         tvWeight = (TextView) findViewById(R.id.tvWeight);
-        tvBloodPressure = (TextView) findViewById(R.id.tvBloodPressure);
+        tvsystolicBP = (TextView) findViewById(R.id.tvSystolic);
+        tvDiastolicBP = findViewById(R.id.tvDiastolic);
         tvTemperature = (TextView) findViewById(R.id.tvTemperature);
         tvOxygenLevel = (TextView) findViewById(R.id.tvOxygenLevel);
         tvDiagnosis = (TextView) findViewById(R.id.tvDiagnosis);
@@ -144,8 +146,9 @@ public class ViewAppointment extends AppCompatActivity {
                 System.out.println("Weight: " + appointmentJSON.getDouble("weight"));
                 tvWeight.setText("Weight (kg): " + appointmentJSON.getDouble("weight"));
 
-                System.out.println("Blood Pressure: " + appointmentJSON.getDouble("bloodPressure"));
-                tvBloodPressure.setText("Blood Pressure (mmHg): " + appointmentJSON.getDouble("bloodPressure"));
+
+                tvsystolicBP.setText("Blood Pressure, Systolic (mmHg): " + appointmentJSON.getDouble("systolicBP"));
+                tvDiastolicBP.setText("Blood Pressure, Diastolic (mmHg): " + appointmentJSON.getDouble("diastolicBP"));
 
                 System.out.println("Temperature: " + appointmentJSON.getDouble("temperature"));
                 tvTemperature.setText("Temperature (°C): " + appointmentJSON.getDouble("temperature"));
