@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.utils.DBController;
 import com.example.indoornavigationsystemforummc.R;
@@ -40,6 +41,7 @@ public class ViewAppointment extends AppCompatActivity {
     private String appointmentDateString;
     private String appointmentIDString;
     private String appointmentStatusString;
+    private LinearProgressIndicator progBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,9 @@ public class ViewAppointment extends AppCompatActivity {
         tvDiagnosis = (TextView) findViewById(R.id.tvDiagnosis);
         tvAdditionalNotes = (TextView) findViewById(R.id.tvAdditionalNotes);
 
+        progBar = findViewById(R.id.appointmentProgBar);
+        progBar.setVisibility(View.VISIBLE);
+
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
 
         String appointmentID = getIntent().getStringExtra("appointmentID");
@@ -71,7 +76,7 @@ public class ViewAppointment extends AppCompatActivity {
         dbConn.viewAppointment(appointmentID, new StringCallback() {
             @Override
             public void onSuccess(String response) throws JSONException {
-
+                progBar.setVisibility(View.GONE);
                 JSONObject appointmentJSON = new JSONObject(response);
 
                 System.out.println(response);
@@ -167,7 +172,8 @@ public class ViewAppointment extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-
+                progBar.setVisibility(View.GONE);
+                Toast.makeText(ViewAppointment.this, "ERROR CONNECTING", Toast.LENGTH_LONG).show();
             }
         });
 

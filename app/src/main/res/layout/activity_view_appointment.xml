@@ -5,19 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.unikl.indoornavigationsystemforummc.medicalappointment.CreateAppointment"
-    android:layout_gravity="center">
-
-
+    android:layout_gravity="center"
+    android:orientation="horizontal">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="UselessParent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/appointmentProgBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

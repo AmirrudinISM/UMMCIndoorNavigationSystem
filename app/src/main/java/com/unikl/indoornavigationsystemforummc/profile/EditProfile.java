@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.utils.DBController;
 import com.example.indoornavigationsystemforummc.R;
@@ -28,7 +29,7 @@ public class EditProfile extends AppCompatActivity {
 
     Button btnSaveChanges;
     TextView lblCancel;
-    DBController db;
+   LinearProgressIndicator editProgBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +37,20 @@ public class EditProfile extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
-        db = new DBController(EditProfile.this);
+
 
         txtPhoneNumber = (EditText) findViewById(R.id.txtPhoneNumber);
         txtAddress = (EditText) findViewById(R.id.txtAddress);
         txtHeight = (EditText) findViewById(R.id.txtHeight);
 
+        editProgBar = findViewById(R.id.editProgBar);
+        editProgBar.setVisibility(View.VISIBLE);
+
         DBConn dbConn = new DBConn(EditProfile.this);
         dbConn.viewPatient(preferences.getString("PatientID", ""), new StringCallback() {
             @Override
             public void onSuccess(String response) throws JSONException {
+                editProgBar.setVisibility(View.GONE);
                 JSONObject profileJSON = new JSONObject(response);
                 txtPhoneNumber.setText(profileJSON.getString("phoneNumber"));
                 txtAddress.setText(profileJSON.getString("address"));
@@ -54,7 +59,8 @@ public class EditProfile extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-
+                editProgBar.setVisibility(View.GONE);
+                Toast.makeText(EditProfile.this, "ERROR CONNECTING",Toast.LENGTH_SHORT ).show();
             }
         });
 
@@ -62,7 +68,7 @@ public class EditProfile extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                editProgBar.setVisibility(View.VISIBLE);
                 String patientID = preferences.getString("PatientID","");
                 String phoneNumber = txtPhoneNumber.getText().toString();
                 String address = txtAddress.getText().toString();
@@ -80,6 +86,7 @@ public class EditProfile extends AppCompatActivity {
                         dbConn.updateProfile(patientID, phoneNumber, address, height, new StringCallback() {
                             @Override
                             public void onSuccess(String response) throws JSONException {
+                                editProgBar.setVisibility(View.GONE);
                                 Toast.makeText(EditProfile.this, "Update Successful!", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(EditProfile.this, Profile.class);
                                 startActivity(intent);
@@ -87,6 +94,7 @@ public class EditProfile extends AppCompatActivity {
 
                             @Override
                             public void onFailure() {
+                                editProgBar.setVisibility(View.GONE);
                                 Toast.makeText(EditProfile.this, "Update Failed!", Toast.LENGTH_LONG).show();
                             }
                         });
