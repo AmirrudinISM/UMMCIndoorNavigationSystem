@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class DBConn {
     private Context context;
-    private final String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
+    private final String url = "http://10.59.56.123:8080/UMMCMedicalAppointmentManagementSystem/AndroidServlet";
     public DBConn(Context context){
         this.context = context;
     }
@@ -85,7 +85,7 @@ public class DBConn {
     public void login(String email, String password, final JsonObjectCallback callback) throws JSONException {
         RequestQueue queue = Volley.newRequestQueue(context);
         Patient inPatient = new Patient();
-        String url = "http://192.168.1.131:8080/UMMCMedicalAppointmentManagementSystem/AndroidJsonServlet";
+        String url = "http://10.59.56.123:8080/UMMCMedicalAppointmentManagementSystem/AndroidJsonServlet";
 
         JSONObject params = new JSONObject();
         params.put("action", "login");

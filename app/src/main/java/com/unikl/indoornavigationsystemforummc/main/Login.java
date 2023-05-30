@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.indoornavigationsystemforummc.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.utils.JsonObjectCallback;
 
@@ -24,8 +26,8 @@ import org.json.JSONObject;
 import java.util.Objects;
 
 public class Login extends AppCompatActivity {
-    private EditText txtEmail;
-    private EditText txtPassword;
+    private TextInputEditText txtEmail;
+    private TextInputEditText txtPassword;
     private Button btnLogin;
     private TextView lblRegister;
     private TextView lblReturnHome;
@@ -38,11 +40,11 @@ public class Login extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp", Context.MODE_PRIVATE);
 
-        txtEmail = (EditText) findViewById(R.id.emailInput);
-        txtPassword = (EditText) findViewById(R.id.passwordInput);
+        txtEmail =  findViewById(R.id.emailInput);
+        txtPassword =  findViewById(R.id.passwordInput);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         lblRegister = (TextView) findViewById(R.id.lblRegister);
-        lblReturnHome = (TextView) findViewById(R.id.lblReturnToHome);
+        lblReturnHome = findViewById(R.id.lblReturnHome);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
@@ -120,9 +122,10 @@ public class Login extends AppCompatActivity {
         lblReturnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this,MainMenu.class);
+                Intent intent = new Intent(Login.this, MainMenu.class);
                 startActivity(intent);
             }
         });
+
     }
 }
