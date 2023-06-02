@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.indoornavigationsystemforummc.R;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 public class ViewDoctorProfile extends AppCompatActivity {
     private TextView lblName, lblQualification, lblDoctorID, lblDrEmail, lblPhoneNumber, lblLocation;
     private LinearProgressIndicator progressBar;
+    private Button btnNavigate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class ViewDoctorProfile extends AppCompatActivity {
         lblDrEmail = findViewById(R.id.lblDrEmail);
         lblPhoneNumber = findViewById(R.id.lblPhoneNumber);
         lblLocation = findViewById(R.id.lblLocation);
+        btnNavigate = findViewById(R.id.btnNavigate);
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
 
@@ -53,6 +56,13 @@ public class ViewDoctorProfile extends AppCompatActivity {
                 lblDrEmail.setText(doctorJSON.getString("email"));
                 lblPhoneNumber.setText(doctorJSON.getString("phoneNumber"));
                 lblLocation.setText(doctorJSON.getString("location"));
+
+                btnNavigate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        
+                    }
+                });
 
             }
 

@@ -15,138 +15,195 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16pt">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <!--ACC DETAILS-->
+
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:fontFamily="@font/roboto"
                 android:text="Register Account"
+                android:textAlignment="center"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.045" />
+                tools:layout_editor_absoluteX="0dp" />
 
             <TextView
                 android:id="@+id/lblAccDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                android:fontFamily="@font/roboto"
                 android:text="Account Details"
+                android:textStyle="bold"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.042"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
-                app:layout_constraintVertical_bias="0.057" />
+                app:layout_constraintVertical_bias="0.012" />
 
-            <EditText
-                android:id="@+id/txtNRIC"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txLyIC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="NRIC"
-                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblAccDetail" />
+                app:startIconDrawable="@drawable/badge_24px"
+                app:hintTextColor="@color/situm_light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/lblAccDetail">
 
-            <EditText
-                android:id="@+id/txtEmail"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtNRIC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:hint="NRIC"
+                    android:minHeight="48dp"
+                     />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txLyEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="Email"
-                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNRIC" />
+                app:hintTextColor="@color/situm_light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/txLyIC"
+                app:startIconDrawable="@drawable/mail_24px">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:hint="Email"
+                    android:minHeight="48dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/txtPassword"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txLyPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+                app:hintTextColor="@color/situm_light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/txLyEmail"
+                app:startIconDrawable="@drawable/password_24px">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                     />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/txtReconfirmPassword"
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txLyReconfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="Reconfirm Password"
-                android:inputType="textPassword"
-                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+                app:hintTextColor="@color/situm_light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/txLyPassword"
+                app:startIconDrawable="@drawable/password_24px"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtReconfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:hint="Reconfirm Password"
+                    android:inputType="textPassword"
+                    android:minHeight="48dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <TextView
-                android:id="@+id/lblPersonalInfo"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvPersonalInfo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Personal Details"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="Personal Information"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.042"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtReconfirmPassword"
-                app:layout_constraintVertical_bias="0.057" />
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/txLyReconfirmPassword"/>
 
-            <EditText
-                android:id="@+id/txtFirstName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txLyFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="FirstName"
-                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblPersonalInfo" />
+                app:hintTextColor="@color/situm_light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/tvPersonalInfo">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:hint="First Name"
+                    android:minHeight="48dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/txtLastName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txLyLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:hint="Last Name"
-                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtFirstName" />
+                app:hintTextColor="@color/situm_light_gray"
+                app:layout_constraintTop_toBottomOf="@+id/txLyFirstName">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:hint="Last Name"
+                    android:minHeight="48dp"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <Spinner
                 android:id="@+id/spnrEthnicity"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_margin="12dp"
+                android:layout_marginVertical="16sp"
                 android:text="Ethnicity"
                 android:textSize="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtLastName" />
+                app:layout_constraintTop_toBottomOf="@+id/txLyLastName" />
 
             <Spinner
                 android:id="@+id/spnrBloodType"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_margin="12dp"
+                android:layout_marginVertical="16sp"
                 android:text="Blood Type"
                 android:textSize="22dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -157,7 +214,7 @@
                 android:id="@+id/lblChronicIllnesses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16sp"
+                android:layout_marginVertical="16sp"
                 android:text="Please select any chronic illnesses you are currently suffering from:"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -168,7 +225,6 @@
                 android:id="@+id/chckStroke"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Stroke"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +235,6 @@
                 android:id="@+id/chckDepression"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Depression"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -190,7 +245,6 @@
                 android:id="@+id/chckDiabetes1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Diabetes Type 1"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -201,7 +255,6 @@
                 android:id="@+id/chckDiabetes2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Diabetes Type 2"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +265,6 @@
                 android:id="@+id/chckArthritis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Arthritis"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -223,7 +275,6 @@
                 android:id="@+id/chckOsteoporosis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Osteoporosis"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -234,7 +285,6 @@
                 android:id="@+id/chckAsthma"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Asthma"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -245,7 +295,6 @@
                 android:id="@+id/chckPulmonaryDisease"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Chronic obstructive pulmonary disease (COPD)"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -256,7 +305,6 @@
                 android:id="@+id/chckKidneyDisease"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Chronic Kidney Disease"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -267,7 +315,6 @@
                 android:id="@+id/chckHeartDisease"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
                 android:text="Heart Disease"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -283,10 +330,12 @@
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
                 android:layout_marginVertical="12sp"
                 android:text="Register"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:padding="14dp"
+                app:icon="@drawable/how_to_reg_24px"
+                app:iconGravity="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

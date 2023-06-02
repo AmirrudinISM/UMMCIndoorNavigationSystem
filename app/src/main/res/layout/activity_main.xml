@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        app:indicatorColor="@color/situm_primary_color"
         android:indeterminate="true"/>
 
     <ImageView
@@ -21,6 +22,7 @@
         android:layout_marginTop="19dp"
         android:layout_marginBottom="36dp"
         android:contentDescription="logo for UM"
+
         android:src="@drawable/logoppum_outline" />
 
     <TextView
@@ -46,6 +48,7 @@
         android:layout_marginHorizontal="16pt"
         android:layout_marginVertical="4pt"
         app:startIconDrawable="@drawable/mail_24px"
+        app:hintTextColor="@color/situm_light_gray"
         android:layout_below="@+id/tvLogin">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -70,6 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/emailLayout"
+        app:hintTextColor="@color/situm_light_gray"
         android:layout_marginHorizontal="16pt"
         android:layout_marginVertical="4pt">
         <com.google.android.material.textfield.TextInputEditText
@@ -99,9 +103,10 @@
         android:fontFamily="@font/roboto"
         android:padding="14dp"
         android:text="Login"
+        android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:icon="@drawable/twotone_login_white_24dp"
+        app:icon="@drawable/login_24px"
         app:iconGravity="textStart" />
 
     <TextView
