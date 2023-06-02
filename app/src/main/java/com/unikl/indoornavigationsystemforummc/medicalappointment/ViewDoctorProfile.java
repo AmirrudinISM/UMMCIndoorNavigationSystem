@@ -2,6 +2,7 @@ package com.unikl.indoornavigationsystemforummc.medicalappointment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.indoornavigationsystemforummc.R;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.unikl.indoornavigationsystemforummc.navigation.IndoorNavigation;
 import com.unikl.indoornavigationsystemforummc.utils.DBConn;
 import com.unikl.indoornavigationsystemforummc.utils.StringCallback;
 
@@ -60,7 +62,17 @@ public class ViewDoctorProfile extends AppCompatActivity {
                 btnNavigate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        
+                        Intent intent = new Intent(ViewDoctorProfile.this, IndoorNavigation.class);
+                        try {
+                            intent.putExtra("roomID" ,doctorJSON.getString("location"));
+                            intent.putExtra("latitude" ,doctorJSON.getString("latitude"));
+                            intent.putExtra("longitude" ,doctorJSON.getString("longitude"));
+                            intent.putExtra("floorID" ,doctorJSON.getString("floorID"));
+                            intent.putExtra("buildingID" ,doctorJSON.getString("buildingID"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        startActivity(intent);
                     }
                 });
 

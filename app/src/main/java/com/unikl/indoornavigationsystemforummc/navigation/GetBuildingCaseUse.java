@@ -24,10 +24,6 @@ public class GetBuildingCaseUse {
         void onError(Error error);
     }
 
-    public interface GeofencesCallback {
-        void onSuccess(Floor floor, Bitmap bitmap, List<Geofence> geofences);
-        void onError(Error error);
-    }
 
     private Callback callback;
 
@@ -99,44 +95,7 @@ public class GetBuildingCaseUse {
         return currBuilding;
     }
 
-    public void getGeofences(Building building, GeofencesCallback geofencesCallback) {
-        SitumSdk.communicationManager().fetchFloorsFromBuilding(building.getIdentifier(), new Handler<Collection<Floor>>() {
-            @Override
-            public void onSuccess(Collection<Floor> floors) {
-                if(!floors.isEmpty()){
-                    Floor floor = floors.iterator().next();
-                    SitumSdk.communicationManager().fetchMapFromFloor(floor, new Handler<Bitmap>() {
-                        @Override
-                        public void onSuccess(Bitmap bitmap) {
-                            SitumSdk.communicationManager().fetchGeofencesFromBuilding(building, new Handler<List<Geofence>>() {
-                                @Override
-                                public void onSuccess(List<Geofence> geofences) {
-                                    geofencesCallback.onSuccess(floor, bitmap, geofences);
-                                }
 
-                                @Override
-                                public void onFailure(Error error) {
-                                    geofencesCallback.onError(error);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onFailure(Error error) {
-                            geofencesCallback.onError(error);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Error error) {
-                geofencesCallback.onError(error);
-            }
-
-        });
-
-    }
 
     public void cancel (){
         callback = null;

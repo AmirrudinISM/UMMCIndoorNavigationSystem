@@ -5,6 +5,8 @@
     android:orientation="vertical"
     android:layout_margin="4dp">
 
+
+
     <TextView
         android:id="@+id/lblAppointmentID"
         android:text="AppointmentID"

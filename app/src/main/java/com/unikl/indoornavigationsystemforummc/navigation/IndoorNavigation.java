@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.indoornavigationsystemforummc.R;
-import com.google.android.gms.maps.model.Dash;
 import com.google.android.gms.maps.model.Dot;
 import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.JointType;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -46,10 +43,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 //import es.situm.gettingstarted.common.floorselector.FloorSelectorView;
 //import es.situm.gettingstarted.common.GetBuildingCaseUse;
 //import es.situm.gettingstarted.common.SampleActivity;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import es.situm.sdk.SitumSdk;
@@ -62,7 +57,6 @@ import es.situm.sdk.location.LocationStatus;
 import es.situm.sdk.location.util.CoordinateConverter;
 import es.situm.sdk.model.cartography.Building;
 import es.situm.sdk.model.cartography.Floor;
-import es.situm.sdk.model.cartography.Poi;
 import es.situm.sdk.model.cartography.Point;
 import es.situm.sdk.model.directions.Route;
 import es.situm.sdk.model.directions.RouteSegment;
@@ -114,6 +108,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     private TextView mNavText;
     private RelativeLayout navigationLayout;
 
+    private LatLng latLngFromExtra;
+    private boolean fromProfile = false;
+
 
 
     @Override
@@ -123,10 +120,19 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         locationManager = SitumSdk.locationManager();
 
         Intent intent = getIntent();
-        if (intent != null)
-            if (intent.hasExtra(Intent.EXTRA_TEXT))
+        if (intent != null) {
+            if (intent.hasExtra(Intent.EXTRA_TEXT)) {
+                Log.d("INTENT EXTRA", "EXTRA:" + intent.getStringExtra(Intent.EXTRA_TEXT));
                 buildingId = intent.getStringExtra(Intent.EXTRA_TEXT);
-
+            }else {
+                Log.d("INTENT RoomID", "ROOMID:" + intent.getStringExtra("roomID"));
+                buildingId = intent.getStringExtra("buildingID");
+                Double lati = Double.valueOf(intent.getStringExtra("latitude"));
+                Double longi = Double.valueOf(intent.getStringExtra("longitude"));
+                latLngFromExtra = new LatLng(lati,longi);
+                fromProfile = true;
+            }
+        }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -159,6 +165,8 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.map = googleMap;
 
+
+
         getBuildingCaseUse.get(buildingId, new GetBuildingCaseUse.Callback() {
 
             @Override
@@ -169,7 +177,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
                 // Once we got the building and the googleMap, instance a new FloorSelector
                 floorSelectorView = findViewById(R.id.situm_floor_selector);
                 floorSelectorView.setFloorSelector(building, map);
-
+                if(fromProfile){
+                    markerDestination = map.addMarker(new MarkerOptions().position(latLngFromExtra).title(getIntent().getStringExtra("roomID")));
+                }
                 map.setOnMapClickListener(latLng -> {
                     getPoint(latLng);
                     markerDestination = map.addMarker(new MarkerOptions().position(latLng).title("destination"));
@@ -185,7 +195,6 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
         });
 
     }
-
 
 
     private void getPoint(LatLng latLng) {
@@ -246,6 +255,9 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 current = location;
+                if(fromProfile){
+                    to = createPoint(latLngFromExtra);
+                }
 
                 // Save the first floor
                 currentFloorId = location.getFloorIdentifier();
@@ -604,6 +616,7 @@ public class IndoorNavigation extends SampleActivity implements OnMapReadyCallba
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         to = createPoint(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude));
+        Log.d("DESTINATION", to.toString());
         return false;
     }
 }
