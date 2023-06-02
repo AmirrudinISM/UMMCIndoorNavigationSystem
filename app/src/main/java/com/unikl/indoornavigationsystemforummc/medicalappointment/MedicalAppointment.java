@@ -41,6 +41,7 @@ public class MedicalAppointment extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         listView = findViewById(R.id.appointmentList);
+        listView.setDivider(null);
 
         SharedPreferences preferences = getSharedPreferences("UMMCApp",MODE_PRIVATE);
         String patientID = preferences.getString("PatientID", "");
@@ -62,6 +63,7 @@ public class MedicalAppointment extends AppCompatActivity {
                     temp.setAppointmentDate(jsonObject.getString("appointmentDate"));
                     temp.setAppointmentTime(jsonObject.getString("appointmentTime"));
                     temp.setAppointmentStatus(jsonObject.getString("appointmentStatus"));
+
                     if(jsonObject.getString("appointmentStatus").equals("PENDING") || jsonObject.getString("appointmentStatus").equals("CONFIRMED")){
                         pendingOrConfirmed++;
                     }

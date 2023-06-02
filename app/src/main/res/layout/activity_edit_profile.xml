@@ -33,7 +33,7 @@
                 android:text="Personal Info"
                 android:textSize="16dp"
                 android:layout_marginVertical="6sp"
-                android:background="#ff77ff"
+                android:background="#808080"
                 />
 
             <TextView
@@ -46,6 +46,7 @@
 
             <EditText
                 android:id="@+id/txtPhoneNumber"
+                android:inputType="phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="PhoneNumber"
@@ -90,12 +91,15 @@
 
             <Button
                 android:id="@+id/btnEditProfile"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="24sp"
                 android:text="Save Changes"
                 android:textSize="20dp"
-                app:cornerRadius="20dp" />
+                android:paddingVertical="14dp"
+                app:icon="@drawable/save_24px"
+                app:iconGravity="textStart"/>
 
             <TextView
                 android:id="@+id/lblCancel"

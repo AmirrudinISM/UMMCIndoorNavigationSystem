@@ -7,8 +7,32 @@
     android:layout_height="match_parent"
     tools:context="com.unikl.indoornavigationsystemforummc.medicalappointment.MedicalAppointment"
     android:gravity="center"
-    android:orientation="vertical"
-    android:id="@+id/linearLayout">
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="4pt">
+
+            <ListView
+                android:id="@+id/appointmentList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8sp"
+                android:layout_marginEnd="8sp"
+                android:layout_marginBottom="8sp">
+            </ListView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 
 
@@ -21,26 +45,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="4pt">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/appointmentList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8sp"
-            android:layout_marginEnd="8sp"
-            android:layout_marginBottom="8sp">
-
-
-
-        </ListView>
-    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnCreateAppointment"
@@ -49,7 +55,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        fab:srcCompat="@android:drawable/ic_menu_add"
+        fab:srcCompat="@drawable/add_40px"
         android:layout_margin="28sp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

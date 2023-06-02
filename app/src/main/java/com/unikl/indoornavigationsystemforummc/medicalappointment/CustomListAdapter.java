@@ -1,6 +1,7 @@
 package com.unikl.indoornavigationsystemforummc.medicalappointment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,12 +46,15 @@ public class CustomListAdapter extends BaseAdapter implements ListAdapter {
 
         TextView displayID = (TextView)view.findViewById(R.id.lblAppointmentID);
         displayID.setText(appointments.get(i).getAppointmentID());
+        displayID.setVisibility(View.GONE);
 
         TextView displayDateTime= (TextView)view.findViewById(R.id.lblAppointmentDateTime);
-        displayDateTime.setText("Appointment Date & Time: " + appointments.get(i).getAppointmentDate() + ", " + appointments.get(i).getAppointmentTime());
+        displayDateTime.setText(appointments.get(i).getAppointmentDate() + ", " + appointments.get(i).getAppointmentTime());
 
         TextView displayAppointmentStatus = (TextView) view.findViewById(R.id.lblStatus);
-        displayAppointmentStatus.setText("Status: "+ appointments.get(i).getAppointmentStatus());
+        String status = appointments.get(i).getAppointmentStatus();
+
+        displayAppointmentStatus.setText(status);
 
         return view;
     }

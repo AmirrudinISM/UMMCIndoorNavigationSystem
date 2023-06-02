@@ -36,7 +36,7 @@
                 android:text="Account Info"
                 android:textSize="16dp"
                 android:layout_marginVertical="6sp"
-                android:background="#ff77ff"
+                android:background="#808080"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:text="Personal Info"
                 android:textSize="16dp"
                 android:layout_marginVertical="6sp"
-                android:background="#ff77ff"
+                android:background="#808080"
                 />
 
             <TextView
@@ -235,12 +235,16 @@
 
             <Button
                 android:id="@+id/btnEditProfile"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="20sp"
-                android:text="Edit Profile"
+                android:text="Edit "
                 android:textSize="20dp"
-                app:cornerRadius="20sp" />
+                android:paddingVertical="14dp"
+                app:icon="@drawable/edit_24px"
+                app:iconGravity="textStart"
+                />
             
             <TextView
                 android:id="@+id/lblMainMenu"
